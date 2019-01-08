@@ -2,7 +2,7 @@ package io.github.klsmith.ifpfc.arithmetic;
 
 import java.math.BigDecimal;
 
-public class Add implements Arithmetic {
+public final class Add implements Arithmetic {
 
     private BigDecimal a, b;
 

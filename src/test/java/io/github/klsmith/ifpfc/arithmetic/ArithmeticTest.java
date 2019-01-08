@@ -10,14 +10,16 @@ public class ArithmeticTest {
 
     @Test
     public void test_add_4_and_5_is_9() {
-        final Arithmetic arithmetic = new Add(4, 5);
-        assertEquals(new BigDecimal(9), arithmetic.resolve());
+        final BigDecimal expected = new BigDecimal(9);
+        final BigDecimal actual = new Add(4, 5).resolve();
+        assertEquals(expected, actual);
     }
 
     @Test
     public void test_add_4_and_4_is_8() {
-        final Arithmetic arithmetic = new Add(4, 4);
-        assertEquals(new BigDecimal(8), arithmetic.resolve());
+        final BigDecimal expected = new BigDecimal(8);
+        final BigDecimal actual = new Add(4, 4).resolve();
+        assertEquals(expected, actual);
     }
 
 }
