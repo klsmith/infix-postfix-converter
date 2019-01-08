@@ -6,10 +6,6 @@ public final class Add implements Arithmetic {
 
     private final BigDecimal a, b;
 
-    public Add(int a, int b) {
-        this(new BigDecimal(a), new BigDecimal(b));
-    }
-
     public Add(double a, double b) {
         this(new BigDecimal(a), new BigDecimal(b));
     }
