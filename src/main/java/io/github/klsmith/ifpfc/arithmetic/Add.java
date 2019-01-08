@@ -4,11 +4,20 @@ import java.math.BigDecimal;
 
 public class Add implements Arithmetic {
 
-    public Add(int i, int j) {}
+    private BigDecimal a, b;
+
+    public Add(int a, int b) {
+        this(new BigDecimal(a), new BigDecimal(b));
+    }
+
+    public Add(BigDecimal a, BigDecimal b) {
+        this.a = a;
+        this.b = b;
+    }
 
     @Override
     public BigDecimal resolve() {
-        return new BigDecimal(9);
+        return a.add(b);
     }
 
 }

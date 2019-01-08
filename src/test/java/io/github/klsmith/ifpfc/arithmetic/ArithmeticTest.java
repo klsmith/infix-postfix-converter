@@ -14,4 +14,10 @@ public class ArithmeticTest {
         assertEquals(new BigDecimal(9), arithmetic.resolve());
     }
 
+    @Test
+    public void test_add_4_and_4_is_8() {
+        final Arithmetic arithmetic = new Add(4, 4);
+        assertEquals(new BigDecimal(8), arithmetic.resolve());
+    }
+
 }
