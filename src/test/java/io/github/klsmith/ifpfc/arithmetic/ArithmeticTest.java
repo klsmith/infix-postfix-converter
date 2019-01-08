@@ -57,6 +57,15 @@ public class ArithmeticTest {
     }
 
     @Test
+    public void testAllNegativeDoubleAdditionsStayNegative() {
+        final Gen<Double> allNegativeDoubles = doubles().between(-Double.MAX_VALUE, 0);
+        qt().forAll(allNegativeDoubles, allNegativeDoubles)
+                .assuming((a, b) -> a + b != 0)
+                .check((a, b) -> new Add(a, b).resolve()
+                        .compareTo(BigDecimal.ZERO) < 0);
+    }
+
+    @Test
     public void testAllIntegerSubtract() {
         qt().forAll(integers().all(), integers().all())
                 .asWithPrecursor((a, b) -> new BigDecimal(a).subtract(new BigDecimal(b)))
