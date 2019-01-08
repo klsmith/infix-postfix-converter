@@ -20,4 +20,14 @@ public class ArithmeticTest {
                 });
     }
 
+    @Test
+    public void testAllSubtract() {
+        qt().forAll(integers().all(), integers().all())
+                .asWithPrecursor((a, b) -> new BigDecimal(a).subtract(new BigDecimal(b)))
+                .checkAssert((a, b, expected) -> {
+                    final BigDecimal actual = new Subtract(a, b).resolve();
+                    assertEquals(expected, actual);
+                });
+    }
+
 }
