@@ -43,6 +43,11 @@
 			<version>${junit.version}</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.quicktheories</groupId>
+			<artifactId>quicktheories</artifactId>
+			<version>0.25</version>
+		</dependency>
 	</dependencies>
 
 </project>
