@@ -17,8 +17,8 @@ public class Subtract extends BinaryArithmetic {
     }
 
     @Override
-    public BigDecimal resolve() {
-        return getA().subtract(getB());
+    protected BigDecimal resolve(BigDecimal a, BigDecimal b) {
+        return a.subtract(b);
     }
 
 }

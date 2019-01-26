@@ -16,9 +16,29 @@ public final class Add extends BinaryArithmetic {
         super(a, b);
     }
 
+    public Add(Arithmetic a, int b) {
+        super(a, b);
+    }
+
+    public Add(int a, Arithmetic b) {
+        super(a, b);
+    }
+
+    public Add(Arithmetic a, double b) {
+        super(a, b);
+    }
+
+    public Add(double a, Arithmetic b) {
+        super(a, b);
+    }
+
+    public Add(Arithmetic a, Arithmetic b) {
+        super(a, b);
+    }
+
     @Override
-    public BigDecimal resolve() {
-        return getA().add(getB());
+    protected BigDecimal resolve(BigDecimal a, BigDecimal b) {
+        return a.add(b);
     }
 
 }

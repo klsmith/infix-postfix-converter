@@ -17,8 +17,7 @@ public class Multiply extends BinaryArithmetic {
     }
 
     @Override
-    public BigDecimal resolve() {
-        return getA().multiply(getB());
+    protected BigDecimal resolve(BigDecimal a, BigDecimal b) {
+        return a.multiply(b);
     }
-
 }

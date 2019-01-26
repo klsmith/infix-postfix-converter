@@ -20,8 +20,7 @@ public class Divide extends BinaryArithmetic {
     }
 
     @Override
-    public BigDecimal resolve() {
-        return getA().divide(getB(), DEFAULT_ROUNDING_MODE);
+    protected BigDecimal resolve(BigDecimal a, BigDecimal b) {
+        return a.divide(b, DEFAULT_ROUNDING_MODE);
     }
-
 }
