@@ -11,6 +11,11 @@ public class Multiply implements Arithmetic {
         this.b = BigDecimal.valueOf(b);
     }
 
+    public Multiply(double a, double b) {
+        this.a = BigDecimal.valueOf(a);
+        this.b = BigDecimal.valueOf(b);
+    }
+
     @Override
     public BigDecimal resolve() {
         return a.multiply(b);
