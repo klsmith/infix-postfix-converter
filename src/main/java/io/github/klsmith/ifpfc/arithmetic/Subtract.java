@@ -6,7 +6,7 @@ public class Subtract implements Arithmetic {
 
     final BigDecimal a, b;
 
-    public Subtract(int a, int b) {
+    public Subtract(double a, double b) {
         this(new BigDecimal(a), new BigDecimal(b));
     }
 
