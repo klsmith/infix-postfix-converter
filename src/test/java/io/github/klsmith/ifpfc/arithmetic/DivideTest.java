@@ -31,4 +31,9 @@ public class DivideTest extends BinaryArithmeticTest {
         testAllFiniteDoubles();
     }
 
+    @Override
+    protected boolean doubleAssumptions(double a, double b) {
+        return b != 0;
+    }
+
 }

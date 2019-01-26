@@ -52,14 +52,20 @@ public abstract class BinaryArithmeticTest {
     }
 
     protected void testAllFiniteDoubles() {
-        final Gen<Double> allDoubles = doubles().between(Double.MIN_VALUE, Double.MAX_VALUE);
+        final Gen<Double> allDoubles = doubles().any();
         qt().forAll(allDoubles, allDoubles)
-                .assuming(this::doubleAssumptions)
+                .assuming(this::allFiniteDoublesAssumptions)
                 .checkAssert((a, b) -> {
                     final BigDecimal expected = predict(a, b);
                     final BigDecimal actual = buildArithmetic(a, b).resolve();
                     assertEquals(expected, actual);
                 });;
+    }
+
+    private final boolean allFiniteDoublesAssumptions(double a, double b) {
+        return !Double.isInfinite(a)
+                && !Double.isInfinite(b)
+                && doubleAssumptions(a, b);
     }
 
     protected boolean doubleAssumptions(double a, double b) {
