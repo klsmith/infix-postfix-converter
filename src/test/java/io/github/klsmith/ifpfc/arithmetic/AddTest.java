@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 import org.junit.Test;
 import org.quicktheories.core.Gen;
 
-public class ArithmeticTest {
+public class AddTest {
 
     @Test
     public void testAllIntegerAddition() {
@@ -63,16 +63,6 @@ public class ArithmeticTest {
                 .assuming((a, b) -> a + b != 0)
                 .check((a, b) -> new Add(a, b).resolve()
                         .compareTo(BigDecimal.ZERO) < 0);
-    }
-
-    @Test
-    public void testAllIntegerSubtract() {
-        qt().forAll(integers().all(), integers().all())
-                .asWithPrecursor((a, b) -> new BigDecimal(a).subtract(new BigDecimal(b)))
-                .checkAssert((a, b, expected) -> {
-                    final BigDecimal actual = new Subtract(a, b).resolve();
-                    assertEquals(expected, actual);
-                });
     }
 
 }
