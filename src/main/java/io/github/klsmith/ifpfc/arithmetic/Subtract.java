@@ -6,13 +6,14 @@ public class Subtract implements Arithmetic {
 
     final BigDecimal a, b;
 
-    public Subtract(double a, double b) {
-        this(new BigDecimal(a), new BigDecimal(b));
+    public Subtract(int a, int b) {
+        this.a = BigDecimal.valueOf(a);
+        this.b = BigDecimal.valueOf(b);
     }
 
-    public Subtract(BigDecimal a, BigDecimal b) {
-        this.a = a;
-        this.b = b;
+    public Subtract(double a, double b) {
+        this.a = BigDecimal.valueOf(a);
+        this.b = BigDecimal.valueOf(b);
     }
 
     @Override

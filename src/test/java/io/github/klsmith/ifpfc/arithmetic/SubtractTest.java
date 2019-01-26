@@ -15,7 +15,7 @@ public class SubtractTest {
     @Test
     public void testAllIntegerSubtract() {
         qt().forAll(integers().all(), integers().all())
-                .asWithPrecursor((a, b) -> new BigDecimal(a).subtract(new BigDecimal(b)))
+                .asWithPrecursor((a, b) -> BigDecimal.valueOf(a).subtract(BigDecimal.valueOf(b)))
                 .checkAssert((a, b, expected) -> {
                     final BigDecimal actual = new Subtract(a, b).resolve();
                     assertEquals(expected, actual);
@@ -26,7 +26,7 @@ public class SubtractTest {
     public void testAllFiniteDoubleSubtraction() {
         final Gen<Double> allDoubles = doubles().between(Double.MIN_VALUE, Double.MAX_VALUE);
         qt().forAll(allDoubles, allDoubles)
-                .asWithPrecursor((a, b) -> new BigDecimal(a).subtract(new BigDecimal(b)))
+                .asWithPrecursor((a, b) -> BigDecimal.valueOf(a).subtract(BigDecimal.valueOf(b)))
                 .checkAssert((a, b, expected) -> {
                     final BigDecimal actual = new Subtract(a, b).resolve();
                     assertEquals(expected, actual);
