@@ -39,21 +39,31 @@ public abstract class BinaryArithmeticTest {
 
     protected void testAllIntegers() {
         qt().forAll(integers().all(), integers().all())
-                .asWithPrecursor(this::predict)
-                .checkAssert((a, b, expected) -> {
+                .assuming(this::integerAssumptions)
+                .checkAssert((a, b) -> {
+                    final BigDecimal expected = predict(a, b);
                     final BigDecimal actual = buildArithmetic(a, b).resolve();
                     assertEquals(expected, actual);
                 });
     }
 
+    protected boolean integerAssumptions(int a, int b) {
+        return true;
+    }
+
     protected void testAllFiniteDoubles() {
         final Gen<Double> allDoubles = doubles().between(Double.MIN_VALUE, Double.MAX_VALUE);
         qt().forAll(allDoubles, allDoubles)
-                .asWithPrecursor(this::predict)
-                .checkAssert((a, b, expected) -> {
+                .assuming(this::doubleAssumptions)
+                .checkAssert((a, b) -> {
+                    final BigDecimal expected = predict(a, b);
                     final BigDecimal actual = buildArithmetic(a, b).resolve();
                     assertEquals(expected, actual);
                 });;
+    }
+
+    protected boolean doubleAssumptions(double a, double b) {
+        return true;
     }
 
 }
