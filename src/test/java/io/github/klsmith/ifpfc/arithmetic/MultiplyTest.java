@@ -2,8 +2,6 @@ package io.github.klsmith.ifpfc.arithmetic;
 
 import java.math.BigDecimal;
 
-import org.junit.Test;
-
 public class MultiplyTest extends BinaryArithmeticTest {
 
     @Override
@@ -14,16 +12,6 @@ public class MultiplyTest extends BinaryArithmeticTest {
     @Override
     protected BinaryArithmetic buildArithmetic(BigDecimal a, BigDecimal b) {
         return new Multiply(a, b);
-    }
-
-    @Test
-    public void testAllIntegerMultiplcation() {
-        testAllIntegers();
-    }
-
-    @Test
-    public void testAllFiniteDoubleMultiplcation() {
-        testAllFiniteDoubles();
     }
 
 }

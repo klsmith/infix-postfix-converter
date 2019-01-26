@@ -7,6 +7,7 @@ import static org.quicktheories.generators.SourceDSL.integers;
 
 import java.math.BigDecimal;
 
+import org.junit.Test;
 import org.quicktheories.core.Gen;
 
 public abstract class BinaryArithmeticTest {
@@ -37,7 +38,8 @@ public abstract class BinaryArithmeticTest {
      */
     protected abstract BinaryArithmetic buildArithmetic(BigDecimal a, BigDecimal b);
 
-    protected void testAllIntegers() {
+    @Test
+    public void testAllIntegers() {
         qt().forAll(integers().all(), integers().all())
                 .assuming(this::integerAssumptions)
                 .checkAssert((a, b) -> {
@@ -51,7 +53,8 @@ public abstract class BinaryArithmeticTest {
         return true;
     }
 
-    protected void testAllFiniteDoubles() {
+    @Test
+    public void testAllFiniteDoubles() {
         final Gen<Double> allDoubles = doubles().any();
         qt().forAll(allDoubles, allDoubles)
                 .assuming(this::allFiniteDoublesAssumptions)

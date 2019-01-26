@@ -2,8 +2,6 @@ package io.github.klsmith.ifpfc.arithmetic;
 
 import java.math.BigDecimal;
 
-import org.junit.Test;
-
 public class DivideTest extends BinaryArithmeticTest {
 
     @Override
@@ -16,19 +14,9 @@ public class DivideTest extends BinaryArithmeticTest {
         return new Divide(a, b);
     }
 
-    @Test
-    public void testAllIntegerDivision() {
-        testAllIntegers();
-    }
-
     @Override
     protected boolean integerAssumptions(int a, int b) {
         return b != 0;
-    }
-
-    @Test
-    public void testAllFiniteDoubleDivision() {
-        testAllFiniteDoubles();
     }
 
     @Override

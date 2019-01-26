@@ -22,16 +22,6 @@ public class AddTest extends BinaryArithmeticTest {
     }
 
     @Test
-    public void testAllIntegerAddition() {
-        testAllIntegers();
-    }
-
-    @Test
-    public void testAllFiniteDoubleAddition() {
-        testAllFiniteDoubles();
-    }
-
-    @Test
     public void testAllPositiveIntegerAdditionStaysPositive() {
         qt().forAll(integers().allPositive(), integers().allPositive())
                 .check((a, b) -> new Add(a, b).resolve()
