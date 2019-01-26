@@ -1,11 +1,14 @@
 package io.github.klsmith.ifpfc.arithmetic;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.quicktheories.QuickTheory.qt;
 import static org.quicktheories.generators.SourceDSL.doubles;
 import static org.quicktheories.generators.SourceDSL.integers;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 import org.junit.Test;
 import org.quicktheories.core.Gen;
@@ -39,7 +42,7 @@ public abstract class BinaryArithmeticTest {
     protected abstract BinaryArithmetic buildArithmetic(BigDecimal a, BigDecimal b);
 
     @Test
-    public void testAllIntegers() {
+    public final void testAllIntegers() {
         qt().forAll(integers().all(), integers().all())
                 .assuming(this::integerAssumptions)
                 .checkAssert((a, b) -> {
@@ -54,7 +57,7 @@ public abstract class BinaryArithmeticTest {
     }
 
     @Test
-    public void testAllFiniteDoubles() {
+    public final void testAllFiniteDoubles() {
         final Gen<Double> allDoubles = doubles().any();
         qt().forAll(allDoubles, allDoubles)
                 .assuming(this::allFiniteDoublesAssumptions)
@@ -73,6 +76,36 @@ public abstract class BinaryArithmeticTest {
 
     protected boolean doubleAssumptions(double a, double b) {
         return true;
+    }
+
+    @Test
+    public final void testIdentityEquals() {
+        qt().forAll(integers().all(), integers().all())
+                .checkAssert((a, b) -> {
+                    final BinaryArithmetic arithmetic = buildArithmetic(a, b);
+                    assertTrue(arithmetic.equals(arithmetic));
+                });
+    }
+
+    @Test
+    public final void testCopyEquals() {
+        qt().forAll(integers().all(), integers().all())
+                .checkAssert((a, b) -> {
+                    final BinaryArithmetic arithmetic = buildArithmetic(a, b);
+                    final BinaryArithmetic copy = buildArithmetic(a, b);
+                    assertTrue(arithmetic.equals(copy));
+                });
+    }
+
+    @Test
+    public final void testDifferentValuesNotEquals() {
+        qt().forAll(integers().all(), integers().all(), integers().all(), integers().all())
+                .assuming((a, b, c, d) -> !Objects.equals(a, c) && !Objects.equals(b, d))
+                .checkAssert((a, b, c, d) -> {
+                    final BinaryArithmetic ab = buildArithmetic(a, b);
+                    final BinaryArithmetic cd = buildArithmetic(c, d);
+                    assertFalse(ab.equals(cd));
+                });
     }
 
 }

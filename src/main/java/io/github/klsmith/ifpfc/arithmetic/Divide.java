@@ -23,4 +23,5 @@ public class Divide extends BinaryArithmetic {
     protected BigDecimal resolve(BigDecimal a, BigDecimal b) {
         return a.divide(b, DEFAULT_ROUNDING_MODE);
     }
+
 }

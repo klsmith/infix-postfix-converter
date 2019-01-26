@@ -20,4 +20,5 @@ public class Multiply extends BinaryArithmetic {
     protected BigDecimal resolve(BigDecimal a, BigDecimal b) {
         return a.multiply(b);
     }
+
 }

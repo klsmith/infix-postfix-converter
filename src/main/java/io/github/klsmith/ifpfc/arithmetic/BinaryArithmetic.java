@@ -1,6 +1,7 @@
 package io.github.klsmith.ifpfc.arithmetic;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 public abstract class BinaryArithmetic implements Arithmetic {
 
@@ -53,5 +54,23 @@ public abstract class BinaryArithmetic implements Arithmetic {
     }
 
     protected abstract BigDecimal resolve(BigDecimal a, BigDecimal b);
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getA(), getB());
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (obj.getClass().equals(getClass())) {
+            final BinaryArithmetic other = (BinaryArithmetic) obj;
+            return Objects.equals(getA(), other.getA())
+                    && Objects.equals(getB(), other.getB());
+        }
+        return false;
+    }
 
 }
