@@ -15,7 +15,7 @@ public class MultiplyTest {
     @Test
     public void testAllIntegerMultiplcation() {
         qt().forAll(integers().all(), integers().all())
-                .asWithPrecursor((a, b) -> new BigDecimal(a).multiply(new BigDecimal(b)))
+                .asWithPrecursor((a, b) -> BigDecimal.valueOf(a).multiply(BigDecimal.valueOf(b)))
                 .checkAssert((a, b, expected) -> {
                     final BigDecimal actual = new Multiply(a, b).resolve();
                     assertEquals(expected, actual);
