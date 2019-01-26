@@ -1,6 +1,5 @@
 package io.github.klsmith.ifpfc.arithmetic;
 
-import static org.junit.Assert.assertEquals;
 import static org.quicktheories.QuickTheory.qt;
 import static org.quicktheories.generators.SourceDSL.doubles;
 import static org.quicktheories.generators.SourceDSL.integers;
@@ -10,27 +9,26 @@ import java.math.BigDecimal;
 import org.junit.Test;
 import org.quicktheories.core.Gen;
 
-public class AddTest {
+public class AddTest extends BinaryArithmeticTest {
+
+    @Override
+    protected BigDecimal predict(BigDecimal a, BigDecimal b) {
+        return a.add(b);
+    }
+
+    @Override
+    protected BinaryArithmetic buildArithmetic(BigDecimal a, BigDecimal b) {
+        return new Add(a, b);
+    }
 
     @Test
     public void testAllIntegerAddition() {
-        qt().forAll(integers().all(), integers().all())
-                .asWithPrecursor((a, b) -> BigDecimal.valueOf(a).add(BigDecimal.valueOf(b)))
-                .checkAssert((a, b, expected) -> {
-                    final BigDecimal actual = new Add(a, b).resolve();
-                    assertEquals(expected, actual);
-                });
+        testAllIntegers();
     }
 
     @Test
     public void testAllFiniteDoubleAddition() {
-        final Gen<Double> allDoubles = doubles().between(Double.MIN_VALUE, Double.MAX_VALUE);
-        qt().forAll(allDoubles, allDoubles)
-                .asWithPrecursor((a, b) -> BigDecimal.valueOf(a).add(BigDecimal.valueOf(b)))
-                .checkAssert((a, b, expected) -> {
-                    final BigDecimal actual = new Add(a, b).resolve();
-                    assertEquals(expected, actual);
-                });;
+        testAllFiniteDoubles();
     }
 
     @Test

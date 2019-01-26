@@ -2,23 +2,23 @@ package io.github.klsmith.ifpfc.arithmetic;
 
 import java.math.BigDecimal;
 
-public class Multiply implements Arithmetic {
-
-    private final BigDecimal a, b;
+public class Multiply extends BinaryArithmetic {
 
     public Multiply(int a, int b) {
-        this.a = BigDecimal.valueOf(a);
-        this.b = BigDecimal.valueOf(b);
+        super(a, b);
     }
 
     public Multiply(double a, double b) {
-        this.a = BigDecimal.valueOf(a);
-        this.b = BigDecimal.valueOf(b);
+        super(a, b);
+    }
+
+    public Multiply(BigDecimal a, BigDecimal b) {
+        super(a, b);
     }
 
     @Override
     public BigDecimal resolve() {
-        return a.multiply(b);
+        return getA().multiply(getB());
     }
 
 }

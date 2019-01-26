@@ -2,23 +2,23 @@ package io.github.klsmith.ifpfc.arithmetic;
 
 import java.math.BigDecimal;
 
-public final class Add implements Arithmetic {
-
-    private final BigDecimal a, b;
+public final class Add extends BinaryArithmetic {
 
     public Add(int a, int b) {
-        this.a = BigDecimal.valueOf(a);
-        this.b = BigDecimal.valueOf(b);
+        super(a, b);
     }
 
     public Add(double a, double b) {
-        this.a = BigDecimal.valueOf(a);
-        this.b = BigDecimal.valueOf(b);
+        super(a, b);
+    }
+
+    public Add(BigDecimal a, BigDecimal b) {
+        super(a, b);
     }
 
     @Override
     public BigDecimal resolve() {
-        return a.add(b);
+        return getA().add(getB());
     }
 
 }
