@@ -15,7 +15,7 @@ public class AddTest {
     @Test
     public void testAllIntegerAddition() {
         qt().forAll(integers().all(), integers().all())
-                .asWithPrecursor((a, b) -> new BigDecimal(a).add(new BigDecimal(b)))
+                .asWithPrecursor((a, b) -> BigDecimal.valueOf(a).add(BigDecimal.valueOf(b)))
                 .checkAssert((a, b, expected) -> {
                     final BigDecimal actual = new Add(a, b).resolve();
                     assertEquals(expected, actual);
@@ -26,7 +26,7 @@ public class AddTest {
     public void testAllFiniteDoubleAddition() {
         final Gen<Double> allDoubles = doubles().between(Double.MIN_VALUE, Double.MAX_VALUE);
         qt().forAll(allDoubles, allDoubles)
-                .asWithPrecursor((a, b) -> new BigDecimal(a).add(new BigDecimal(b)))
+                .asWithPrecursor((a, b) -> BigDecimal.valueOf(a).add(BigDecimal.valueOf(b)))
                 .checkAssert((a, b, expected) -> {
                     final BigDecimal actual = new Add(a, b).resolve();
                     assertEquals(expected, actual);
