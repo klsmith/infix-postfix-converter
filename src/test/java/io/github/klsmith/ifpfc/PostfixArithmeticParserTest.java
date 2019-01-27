@@ -1,6 +1,8 @@
 package io.github.klsmith.ifpfc;
 
 import static org.junit.Assert.assertEquals;
+import static org.quicktheories.QuickTheory.qt;
+import static org.quicktheories.generators.SourceDSL.integers;
 
 import org.junit.Test;
 
@@ -10,19 +12,25 @@ import io.github.klsmith.ifpfc.arithmetic.Arithmetic;
 public class PostfixArithmeticParserTest {
 
     @Test
-    public void test_2_2_plus() {
+    public void testSimpleIntegerAddition() {
         final ArithmeticParser parser = new PostfixArithmeticParser();
-        final Arithmetic expected = new Add(2, 2);
-        final Arithmetic actual = parser.parse("2 2 +");
-        assertEquals(expected, actual);
+        qt().forAll(integers().all(), integers().all())
+                .checkAssert((a, b) -> {
+                    final Arithmetic expected = predictSimpleAddition(a, b);
+                    final Arithmetic actual = parser.parse(toSimpleAdditionString(a, b));
+                    assertEquals(expected, actual);
+                });
     }
 
-    @Test
-    public void test_4_2_plus() {
-        final ArithmeticParser parser = new PostfixArithmeticParser();
-        final Arithmetic expected = new Add(4, 2);
-        final Arithmetic actual = parser.parse("4 2 +");
-        assertEquals(expected, actual);
+    private Arithmetic predictSimpleAddition(int a, int b) {
+        return new Add(a, b);
+    }
+
+    private String toSimpleAdditionString(int a, int b) {
+        return String.join(" ",
+                String.valueOf(a),
+                String.valueOf(b),
+                "+");
     }
 
 }
