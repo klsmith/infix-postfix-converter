@@ -11,6 +11,7 @@ import org.junit.Test;
 
 import io.github.klsmith.ifpfc.arithmetic.Add;
 import io.github.klsmith.ifpfc.arithmetic.Arithmetic;
+import io.github.klsmith.ifpfc.arithmetic.Divide;
 import io.github.klsmith.ifpfc.arithmetic.Multiply;
 import io.github.klsmith.ifpfc.arithmetic.Subtract;
 
@@ -82,6 +83,24 @@ public class PostfixArithmeticParserTest {
                 .checkAssert((a, b) -> {
                     final Arithmetic expected = new Multiply(a, b);
                     final Arithmetic actual = parser.parse(toPostfixString(a, b, "*"));
+                    assertEquals(expected, actual);
+                });
+    }
+
+    @Test
+    public void testSimpleDivision() {
+        final ArithmeticParser parser = new PostfixArithmeticParser();
+        qt().forAll(integers().all(), integers().all())
+                .checkAssert((a, b) -> {
+                    final Arithmetic expected = new Divide(a, b);
+                    final Arithmetic actual = parser.parse(toPostfixString(a, b, "/"));
+                    assertEquals(expected, actual);
+                });
+        qt().forAll(doubles().any(), doubles().any())
+                .assuming(this::assumeFiniteDoubles)
+                .checkAssert((a, b) -> {
+                    final Arithmetic expected = new Divide(a, b);
+                    final Arithmetic actual = parser.parse(toPostfixString(a, b, "/"));
                     assertEquals(expected, actual);
                 });
     }

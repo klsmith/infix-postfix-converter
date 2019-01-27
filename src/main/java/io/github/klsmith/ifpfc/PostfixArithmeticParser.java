@@ -8,6 +8,7 @@ import java.util.Scanner;
 
 import io.github.klsmith.ifpfc.arithmetic.Add;
 import io.github.klsmith.ifpfc.arithmetic.Arithmetic;
+import io.github.klsmith.ifpfc.arithmetic.Divide;
 import io.github.klsmith.ifpfc.arithmetic.Multiply;
 import io.github.klsmith.ifpfc.arithmetic.Subtract;
 
@@ -38,6 +39,8 @@ public class PostfixArithmeticParser implements ArithmeticParser {
                     case "*":
                         result = new Multiply(a, b);
                         break;
+                    case "/":
+                        result = new Divide(a, b);
                     default:
                         break;
                 }
