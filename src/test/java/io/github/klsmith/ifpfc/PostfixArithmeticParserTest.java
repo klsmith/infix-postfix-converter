@@ -11,8 +11,21 @@ import org.junit.Test;
 
 import io.github.klsmith.ifpfc.arithmetic.Add;
 import io.github.klsmith.ifpfc.arithmetic.Arithmetic;
+import io.github.klsmith.ifpfc.arithmetic.Subtract;
 
 public class PostfixArithmeticParserTest {
+
+    private String toPostfixString(int a, int b, String operator) {
+        return toPostfixString(BigDecimal.valueOf(a), BigDecimal.valueOf(b), operator);
+    }
+
+    private String toPostfixString(double a, double b, String operator) {
+        return toPostfixString(BigDecimal.valueOf(a), BigDecimal.valueOf(b), operator);
+    }
+
+    private String toPostfixString(BigDecimal a, BigDecimal b, String operator) {
+        return String.join(" ", a.toString(), b.toString(), operator);
+    }
 
     @Test
     public void testSimpleAddition() {
@@ -20,32 +33,38 @@ public class PostfixArithmeticParserTest {
         qt().forAll(integers().all(), integers().all())
                 .checkAssert((a, b) -> {
                     final Arithmetic expected = new Add(a, b);
-                    final Arithmetic actual = parser.parse(toSimpleAdditionString(a, b));
+                    final Arithmetic actual = parser.parse(toPostfixString(a, b, "+"));
                     assertEquals(expected, actual);
                 });
         qt().forAll(doubles().any(), doubles().any())
                 .assuming(this::assumeFiniteDoubles)
                 .checkAssert((a, b) -> {
                     final Arithmetic expected = new Add(a, b);
-                    final Arithmetic actual = parser.parse(toSimpleAdditionString(a, b));
+                    final Arithmetic actual = parser.parse(toPostfixString(a, b, "+"));
                     assertEquals(expected, actual);
                 });
     }
 
-    private String toSimpleAdditionString(int a, int b) {
-        return toSimpleAdditionString(BigDecimal.valueOf(a), BigDecimal.valueOf(b));
-    }
-
-    private String toSimpleAdditionString(double a, double b) {
-        return toSimpleAdditionString(BigDecimal.valueOf(a), BigDecimal.valueOf(b));
-    }
-
-    private String toSimpleAdditionString(BigDecimal a, BigDecimal b) {
-        return String.join(" ", a.toString(), b.toString(), "+");
-    }
-
     private boolean assumeFiniteDoubles(double a, double b) {
         return Double.isFinite(a) && Double.isFinite(b);
+    }
+
+    @Test
+    public void testSimpleSubtraction() {
+        final ArithmeticParser parser = new PostfixArithmeticParser();
+        qt().forAll(integers().all(), integers().all())
+                .checkAssert((a, b) -> {
+                    final Arithmetic expected = new Subtract(a, b);
+                    final Arithmetic actual = parser.parse(toPostfixString(a, b, "-"));
+                    assertEquals(expected, actual);
+                });
+        qt().forAll(doubles().any(), doubles().any())
+                .assuming(this::assumeFiniteDoubles)
+                .checkAssert((a, b) -> {
+                    final Arithmetic expected = new Subtract(a, b);
+                    final Arithmetic actual = parser.parse(toPostfixString(a, b, "-"));
+                    assertEquals(expected, actual);
+                });
     }
 
 }

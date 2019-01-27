@@ -8,6 +8,7 @@ import java.util.Scanner;
 
 import io.github.klsmith.ifpfc.arithmetic.Add;
 import io.github.klsmith.ifpfc.arithmetic.Arithmetic;
+import io.github.klsmith.ifpfc.arithmetic.Subtract;
 
 public class PostfixArithmeticParser implements ArithmeticParser {
 
@@ -26,7 +27,11 @@ public class PostfixArithmeticParser implements ArithmeticParser {
                 }
                 final BigDecimal b = stack.pop();
                 final BigDecimal a = stack.pop();
-                result = new Add(a, b);
+                if ("+".equals(token)) {
+                    result = new Add(a, b);
+                } else {
+                    result = new Subtract(a, b);
+                }
             }
         }
         return result;
