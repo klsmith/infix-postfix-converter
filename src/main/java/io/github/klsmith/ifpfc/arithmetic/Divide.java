@@ -19,6 +19,26 @@ public class Divide extends BinaryArithmetic {
         super(a, b);
     }
 
+    public Divide(Arithmetic a, int b) {
+        super(a, b);
+    }
+
+    public Divide(int a, Arithmetic b) {
+        super(a, b);
+    }
+
+    public Divide(Arithmetic a, double b) {
+        super(a, b);
+    }
+
+    public Divide(double a, Arithmetic b) {
+        super(a, b);
+    }
+
+    public Divide(Arithmetic a, Arithmetic b) {
+        super(a, b);
+    }
+
     @Override
     protected BigDecimal resolve(BigDecimal a, BigDecimal b) {
         return a.divide(b, DEFAULT_ROUNDING_MODE);

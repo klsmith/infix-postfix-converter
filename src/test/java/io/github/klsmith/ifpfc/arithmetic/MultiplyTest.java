@@ -10,7 +10,7 @@ public class MultiplyTest extends BinaryArithmeticTest {
     }
 
     @Override
-    protected BinaryArithmetic buildArithmetic(BigDecimal a, BigDecimal b) {
+    protected BinaryArithmetic buildArithmetic(Arithmetic a, Arithmetic b) {
         return new Multiply(a, b);
     }
 

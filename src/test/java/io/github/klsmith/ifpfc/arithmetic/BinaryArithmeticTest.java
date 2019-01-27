@@ -28,17 +28,17 @@ public abstract class BinaryArithmeticTest {
     protected abstract BigDecimal predict(BigDecimal a, BigDecimal b);
 
     protected BinaryArithmetic buildArithmetic(int a, int b) {
-        return buildArithmetic(BigDecimal.valueOf(a), BigDecimal.valueOf(b));
+        return buildArithmetic(new Value(a), new Value(b));
     }
 
     protected BinaryArithmetic buildArithmetic(double a, double b) {
-        return buildArithmetic(BigDecimal.valueOf(a), BigDecimal.valueOf(b));
+        return buildArithmetic(new Value(a), new Value(b));
     }
 
     /**
      * Must override
      */
-    protected abstract BinaryArithmetic buildArithmetic(BigDecimal a, BigDecimal b);
+    protected abstract BinaryArithmetic buildArithmetic(Arithmetic a, Arithmetic b);
 
     @Test
     public final void testAllIntegers() {
@@ -119,12 +119,42 @@ public abstract class BinaryArithmeticTest {
                 });
         qt().forAll(doubles().any(), doubles().any(), doubles().any(), doubles().any())
                 .assuming((a, b, c, d) -> Double.isFinite(a) && Double.isFinite(b)
-                        && Double.isFinite(c) && Double.isFinite(d))
+                        && Double.isFinite(c) && Double.isFinite(d)
+                        && !Objects.equals(a, c) && !Objects.equals(b, d))
                 .checkAssert((a, b, c, d) -> {
                     final BinaryArithmetic ab = buildArithmetic(a, b);
                     final BinaryArithmetic cd = buildArithmetic(c, d);
                     assertFalse(ab.equals(cd));
                 });
+    }
+
+    @Test
+    public void testNesting() {
+        qt().forAll(integers().all(), integers().all(), integers().all(), integers().all())
+                .assuming(this::nestingIntegerAssumptions)
+                .checkAssert((a, b, c, d) -> {
+                    final BinaryArithmetic ab = buildArithmetic(a, b);
+                    final BinaryArithmetic cd = buildArithmetic(c, d);
+                    final BinaryArithmetic abc = buildArithmetic(ab, new Value(c));
+                    final BinaryArithmetic cab = buildArithmetic(new Value(c), ab);
+                    final BinaryArithmetic abcd = buildArithmetic(ab, cd);
+                    {
+                        BigDecimal expected = predict(predict(a, b), BigDecimal.valueOf(c));
+                        assertEquals(expected, abc.resolve());
+                    }
+                    {
+                        BigDecimal expected = predict(BigDecimal.valueOf(c), predict(a, b));
+                        assertEquals(expected, cab.resolve());
+                    }
+                    {
+                        BigDecimal expected = predict(predict(a, b), predict(c, d));
+                        assertEquals(expected, abcd.resolve());
+                    }
+                });
+    }
+
+    protected boolean nestingIntegerAssumptions(int a, int b, int c, int d) {
+        return true;
     }
 
 }

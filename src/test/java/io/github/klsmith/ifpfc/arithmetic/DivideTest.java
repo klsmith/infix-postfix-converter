@@ -10,7 +10,7 @@ public class DivideTest extends BinaryArithmeticTest {
     }
 
     @Override
-    protected BinaryArithmetic buildArithmetic(BigDecimal a, BigDecimal b) {
+    protected BinaryArithmetic buildArithmetic(Arithmetic a, Arithmetic b) {
         return new Divide(a, b);
     }
 
@@ -22,6 +22,11 @@ public class DivideTest extends BinaryArithmeticTest {
     @Override
     protected boolean doubleAssumptions(double a, double b) {
         return b != 0;
+    }
+
+    @Override
+    protected boolean nestingIntegerAssumptions(int a, int b, int c, int d) {
+        return a != 0 && b != 0 && c != 0 && d != 0;
     }
 
 }

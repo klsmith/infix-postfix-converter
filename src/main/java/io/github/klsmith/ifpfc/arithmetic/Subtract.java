@@ -16,6 +16,26 @@ public class Subtract extends BinaryArithmetic {
         super(a, b);
     }
 
+    public Subtract(Arithmetic a, int b) {
+        super(a, b);
+    }
+
+    public Subtract(int a, Arithmetic b) {
+        super(a, b);
+    }
+
+    public Subtract(Arithmetic a, double b) {
+        super(a, b);
+    }
+
+    public Subtract(double a, Arithmetic b) {
+        super(a, b);
+    }
+
+    public Subtract(Arithmetic a, Arithmetic b) {
+        super(a, b);
+    }
+
     @Override
     protected BigDecimal resolve(BigDecimal a, BigDecimal b) {
         return a.subtract(b);
