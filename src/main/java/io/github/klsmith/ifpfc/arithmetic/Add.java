@@ -41,4 +41,9 @@ public final class Add extends BinaryArithmetic {
         return a.add(b);
     }
 
+    @Override
+    public String toString() {
+        return "Add(" + getA() + ", " + getB() + ")";
+    }
+
 }

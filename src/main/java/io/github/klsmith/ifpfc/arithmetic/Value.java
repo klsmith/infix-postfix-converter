@@ -38,4 +38,9 @@ public class Value implements Arithmetic {
         return false;
     }
 
+    @Override
+    public String toString() {
+        return String.valueOf(value);
+    }
+
 }
