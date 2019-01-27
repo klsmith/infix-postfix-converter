@@ -33,31 +33,8 @@ public class PostfixArithmeticParser implements ArithmeticParser {
     }
 
     private Optional<BigDecimal> parseValue(String token) {
-        final Optional<Integer> integerValue = parseInt(token);
-        if (integerValue.isPresent()) {
-            return Optional.of(BigDecimal.valueOf(integerValue.get()));
-        }
-        final Optional<Double> doubleValue = parseDouble(token);
-        if (doubleValue.isPresent()) {
-            return Optional.of(BigDecimal.valueOf(doubleValue.get()));
-        }
-        return Optional.empty();
-    }
-
-    private Optional<Integer> parseInt(String token) {
         try {
-            if (!token.contains(".")) {
-                return Optional.of(Integer.valueOf(token));
-            }
-        } catch (NumberFormatException e) {
-            // handled with empty return below
-        }
-        return Optional.empty();
-    }
-
-    private Optional<Double> parseDouble(String token) {
-        try {
-            return Optional.of(Double.valueOf(token));
+            return Optional.of(new BigDecimal(token));
         } catch (NumberFormatException e) {
             // handled with empty return below
         }
