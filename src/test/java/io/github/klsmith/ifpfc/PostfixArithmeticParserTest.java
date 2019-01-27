@@ -11,6 +11,7 @@ import org.junit.Test;
 
 import io.github.klsmith.ifpfc.arithmetic.Add;
 import io.github.klsmith.ifpfc.arithmetic.Arithmetic;
+import io.github.klsmith.ifpfc.arithmetic.Multiply;
 import io.github.klsmith.ifpfc.arithmetic.Subtract;
 
 public class PostfixArithmeticParserTest {
@@ -25,6 +26,10 @@ public class PostfixArithmeticParserTest {
 
     private String toPostfixString(BigDecimal a, BigDecimal b, String operator) {
         return String.join(" ", a.toString(), b.toString(), operator);
+    }
+
+    private boolean assumeFiniteDoubles(double a, double b) {
+        return Double.isFinite(a) && Double.isFinite(b);
     }
 
     @Test
@@ -45,10 +50,6 @@ public class PostfixArithmeticParserTest {
                 });
     }
 
-    private boolean assumeFiniteDoubles(double a, double b) {
-        return Double.isFinite(a) && Double.isFinite(b);
-    }
-
     @Test
     public void testSimpleSubtraction() {
         final ArithmeticParser parser = new PostfixArithmeticParser();
@@ -63,6 +64,24 @@ public class PostfixArithmeticParserTest {
                 .checkAssert((a, b) -> {
                     final Arithmetic expected = new Subtract(a, b);
                     final Arithmetic actual = parser.parse(toPostfixString(a, b, "-"));
+                    assertEquals(expected, actual);
+                });
+    }
+
+    @Test
+    public void testSimpleMultiplication() {
+        final ArithmeticParser parser = new PostfixArithmeticParser();
+        qt().forAll(integers().all(), integers().all())
+                .checkAssert((a, b) -> {
+                    final Arithmetic expected = new Multiply(a, b);
+                    final Arithmetic actual = parser.parse(toPostfixString(a, b, "*"));
+                    assertEquals(expected, actual);
+                });
+        qt().forAll(doubles().any(), doubles().any())
+                .assuming(this::assumeFiniteDoubles)
+                .checkAssert((a, b) -> {
+                    final Arithmetic expected = new Multiply(a, b);
+                    final Arithmetic actual = parser.parse(toPostfixString(a, b, "*"));
                     assertEquals(expected, actual);
                 });
     }
