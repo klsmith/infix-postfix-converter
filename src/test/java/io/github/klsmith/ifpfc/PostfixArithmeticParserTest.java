@@ -17,6 +17,8 @@ import io.github.klsmith.ifpfc.arithmetic.Subtract;
 
 public class PostfixArithmeticParserTest {
 
+    private final ArithmeticParser parser = new PostfixArithmeticParser();
+
     private String toPostfixString(int a, int b, String operator) {
         return toPostfixString(BigDecimal.valueOf(a), BigDecimal.valueOf(b), operator);
     }
@@ -35,7 +37,6 @@ public class PostfixArithmeticParserTest {
 
     @Test
     public void testSimpleAddition() {
-        final ArithmeticParser parser = new PostfixArithmeticParser();
         qt().forAll(integers().all(), integers().all())
                 .checkAssert((a, b) -> {
                     final Arithmetic expected = new Add(a, b);
@@ -53,7 +54,6 @@ public class PostfixArithmeticParserTest {
 
     @Test
     public void testSimpleSubtraction() {
-        final ArithmeticParser parser = new PostfixArithmeticParser();
         qt().forAll(integers().all(), integers().all())
                 .checkAssert((a, b) -> {
                     final Arithmetic expected = new Subtract(a, b);
@@ -71,7 +71,6 @@ public class PostfixArithmeticParserTest {
 
     @Test
     public void testSimpleMultiplication() {
-        final ArithmeticParser parser = new PostfixArithmeticParser();
         qt().forAll(integers().all(), integers().all())
                 .checkAssert((a, b) -> {
                     final Arithmetic expected = new Multiply(a, b);
@@ -89,7 +88,6 @@ public class PostfixArithmeticParserTest {
 
     @Test
     public void testSimpleDivision() {
-        final ArithmeticParser parser = new PostfixArithmeticParser();
         qt().forAll(integers().all(), integers().all())
                 .checkAssert((a, b) -> {
                     final Arithmetic expected = new Divide(a, b);
