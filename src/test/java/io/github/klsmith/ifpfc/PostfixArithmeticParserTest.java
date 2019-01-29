@@ -20,6 +20,8 @@ public class PostfixArithmeticParserTest {
 
     private final ArithmeticParser parser = new PostfixArithmeticParser();
 
+    /* Utility Methods */
+
     private boolean assumeFiniteDoubles(Double... doubles) {
         for (Double doubleVal : doubles) {
             if (!Double.isFinite(doubleVal)) {
@@ -36,6 +38,8 @@ public class PostfixArithmeticParserTest {
         }
         return String.join(" ", strings);
     }
+
+    /* Abstract Testing Methods */
 
     public void testSimple(BiFunction<Arithmetic, Arithmetic, Arithmetic> constructor, String operator) {
         qt().forAll(integers().all(), integers().all())
@@ -95,6 +99,28 @@ public class PostfixArithmeticParserTest {
                 });
     }
 
+    private void testDoubleNested(BiFunction<Arithmetic, Arithmetic, Arithmetic> constructor, String operator) {
+        qt().forAll(integers().all(), integers().all(), integers().all(), integers().all())
+                .checkAssert((a, b, c, d) -> {
+                    final Arithmetic expected = constructor.apply(
+                            constructor.apply(new Value(a), new Value(b)),
+                            constructor.apply(new Value(c), new Value(d)));
+                    final Arithmetic actual = parser.parse(withSpaces(a, b, operator, c, d, operator, operator));
+                    assertEquals(expected, actual);
+                });
+        qt().forAll(doubles().any(), doubles().any(), doubles().any(), doubles().any())
+                .assuming(this::assumeFiniteDoubles)
+                .checkAssert((a, b, c, d) -> {
+                    final Arithmetic expected = constructor.apply(
+                            constructor.apply(new Value(a), new Value(b)),
+                            constructor.apply(new Value(c), new Value(d)));
+                    final Arithmetic actual = parser.parse(withSpaces(a, b, operator, c, d, operator, operator));
+                    assertEquals(expected, actual);
+                });
+    }
+
+    /* Addition Tests */
+
     @Test
     public void testSimpleAddition() {
         testSimple(Add::new, "+");
@@ -104,6 +130,13 @@ public class PostfixArithmeticParserTest {
     public void testSingleNestedAddition() {
         testSingleNested(Add::new, "+");
     }
+
+    @Test
+    public void testDoubleNestedAddition() {
+        testDoubleNested(Add::new, "+");
+    }
+
+    /* Subtraction Tests */
 
     @Test
     public void testSimpleSubtraction() {
@@ -116,6 +149,13 @@ public class PostfixArithmeticParserTest {
     }
 
     @Test
+    public void testDoubleNestedSubtraction() {
+        testDoubleNested(Subtract::new, "-");
+    }
+
+    /* Multiplication Tests */
+
+    @Test
     public void testSimpleMultiplication() {
         testSimple(Multiply::new, "*");
     }
@@ -126,6 +166,13 @@ public class PostfixArithmeticParserTest {
     }
 
     @Test
+    public void testDoubleNestedMultiplication() {
+        testDoubleNested(Multiply::new, "*");
+    }
+
+    /* Division Tests */
+
+    @Test
     public void testSimpleDivision() {
         testSimple(Divide::new, "/");
     }
@@ -133,6 +180,11 @@ public class PostfixArithmeticParserTest {
     @Test
     public void testSingleNestedDivision() {
         testSingleNested(Divide::new, "/");
+    }
+
+    @Test
+    public void testDoubleNestedDivision() {
+        testDoubleNested(Divide::new, "/");
     }
 
 }
