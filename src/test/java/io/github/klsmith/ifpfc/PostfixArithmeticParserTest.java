@@ -5,6 +5,8 @@ import static org.quicktheories.QuickTheory.qt;
 import static org.quicktheories.generators.SourceDSL.doubles;
 import static org.quicktheories.generators.SourceDSL.integers;
 
+import java.util.function.BiFunction;
+
 import org.junit.Test;
 
 import io.github.klsmith.ifpfc.arithmetic.Add;
@@ -34,21 +36,26 @@ public class PostfixArithmeticParserTest {
         return String.join(" ", strings);
     }
 
-    @Test
-    public void testSimpleAddition() {
+    public void testSimple(BiFunction<Integer, Integer, Arithmetic> intConstructor,
+            BiFunction<Double, Double, Arithmetic> doubleConstructor, String operator) {
         qt().forAll(integers().all(), integers().all())
                 .checkAssert((a, b) -> {
-                    final Arithmetic expected = new Add(a, b);
-                    final Arithmetic actual = parser.parse(withSpaces(a, b, "+"));
+                    final Arithmetic expected = intConstructor.apply(a, b);
+                    final Arithmetic actual = parser.parse(withSpaces(a, b, operator));
                     assertEquals(expected, actual);
                 });
         qt().forAll(doubles().any(), doubles().any())
                 .assuming(this::assumeFiniteDoubles)
                 .checkAssert((a, b) -> {
-                    final Arithmetic expected = new Add(a, b);
-                    final Arithmetic actual = parser.parse(withSpaces(a, b, "+"));
+                    final Arithmetic expected = doubleConstructor.apply(a, b);
+                    final Arithmetic actual = parser.parse(withSpaces(a, b, operator));
                     assertEquals(expected, actual);
                 });
+    }
+
+    @Test
+    public void testSimpleAddition() {
+        testSimple(Add::new, Add::new, "+");
     }
 
     @Test
@@ -84,19 +91,7 @@ public class PostfixArithmeticParserTest {
 
     @Test
     public void testSimpleSubtraction() {
-        qt().forAll(integers().all(), integers().all())
-                .checkAssert((a, b) -> {
-                    final Arithmetic expected = new Subtract(a, b);
-                    final Arithmetic actual = parser.parse(withSpaces(a, b, "-"));
-                    assertEquals(expected, actual);
-                });
-        qt().forAll(doubles().any(), doubles().any())
-                .assuming(this::assumeFiniteDoubles)
-                .checkAssert((a, b) -> {
-                    final Arithmetic expected = new Subtract(a, b);
-                    final Arithmetic actual = parser.parse(withSpaces(a, b, "-"));
-                    assertEquals(expected, actual);
-                });
+        testSimple(Subtract::new, Subtract::new, "-");
     }
 
     @Test
@@ -132,19 +127,7 @@ public class PostfixArithmeticParserTest {
 
     @Test
     public void testSimpleMultiplication() {
-        qt().forAll(integers().all(), integers().all())
-                .checkAssert((a, b) -> {
-                    final Arithmetic expected = new Multiply(a, b);
-                    final Arithmetic actual = parser.parse(withSpaces(a, b, "*"));
-                    assertEquals(expected, actual);
-                });
-        qt().forAll(doubles().any(), doubles().any())
-                .assuming(this::assumeFiniteDoubles)
-                .checkAssert((a, b) -> {
-                    final Arithmetic expected = new Multiply(a, b);
-                    final Arithmetic actual = parser.parse(withSpaces(a, b, "*"));
-                    assertEquals(expected, actual);
-                });
+        testSimple(Multiply::new, Multiply::new, "*");
     }
 
     @Test
@@ -180,19 +163,7 @@ public class PostfixArithmeticParserTest {
 
     @Test
     public void testSimpleDivision() {
-        qt().forAll(integers().all(), integers().all())
-                .checkAssert((a, b) -> {
-                    final Arithmetic expected = new Divide(a, b);
-                    final Arithmetic actual = parser.parse(withSpaces(a, b, "/"));
-                    assertEquals(expected, actual);
-                });
-        qt().forAll(doubles().any(), doubles().any())
-                .assuming(this::assumeFiniteDoubles)
-                .checkAssert((a, b) -> {
-                    final Arithmetic expected = new Divide(a, b);
-                    final Arithmetic actual = parser.parse(withSpaces(a, b, "/"));
-                    assertEquals(expected, actual);
-                });
+        testSimple(Divide::new, Divide::new, "/");
     }
 
     @Test
