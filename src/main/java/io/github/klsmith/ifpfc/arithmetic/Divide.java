@@ -3,7 +3,7 @@ package io.github.klsmith.ifpfc.arithmetic;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-public class Divide extends BinaryArithmetic {
+public class Divide extends BinaryOperator {
 
     public static final RoundingMode DEFAULT_ROUNDING_MODE = RoundingMode.UP;
 

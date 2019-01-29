@@ -12,7 +12,7 @@ import java.util.Objects;
 
 import org.junit.Test;
 
-public abstract class BinaryArithmeticTest {
+public abstract class BinaryOperatorTest {
 
     protected BigDecimal predict(int a, int b) {
         return predict(BigDecimal.valueOf(a), BigDecimal.valueOf(b));
@@ -27,18 +27,18 @@ public abstract class BinaryArithmeticTest {
      */
     protected abstract BigDecimal predict(BigDecimal a, BigDecimal b);
 
-    protected BinaryArithmetic buildArithmetic(int a, int b) {
+    protected BinaryOperator build(int a, int b) {
         return buildArithmetic(new Value(a), new Value(b));
     }
 
-    protected BinaryArithmetic buildArithmetic(double a, double b) {
+    protected BinaryOperator build(double a, double b) {
         return buildArithmetic(new Value(a), new Value(b));
     }
 
     /**
      * Must override
      */
-    protected abstract BinaryArithmetic buildArithmetic(Arithmetic a, Arithmetic b);
+    protected abstract BinaryOperator buildArithmetic(Arithmetic a, Arithmetic b);
 
     @Test
     public final void testAllIntegers() {
@@ -46,7 +46,7 @@ public abstract class BinaryArithmeticTest {
                 .assuming(this::integerAssumptions)
                 .checkAssert((a, b) -> {
                     final BigDecimal expected = predict(a, b);
-                    final BigDecimal actual = buildArithmetic(a, b).resolve();
+                    final BigDecimal actual = build(a, b).resolve();
                     assertEquals(expected, actual);
                 });
     }
@@ -61,7 +61,7 @@ public abstract class BinaryArithmeticTest {
                 .assuming(this::allFiniteDoublesAssumptions)
                 .checkAssert((a, b) -> {
                     final BigDecimal expected = predict(a, b);
-                    final BigDecimal actual = buildArithmetic(a, b).resolve();
+                    final BigDecimal actual = build(a, b).resolve();
                     assertEquals(expected, actual);
                 });
     }
@@ -80,13 +80,13 @@ public abstract class BinaryArithmeticTest {
     public final void testIdentityEquals() {
         qt().forAll(integers().all(), integers().all())
                 .checkAssert((a, b) -> {
-                    final BinaryArithmetic arithmetic = buildArithmetic(a, b);
+                    final BinaryOperator arithmetic = build(a, b);
                     assertTrue(arithmetic.equals(arithmetic));
                 });
         qt().forAll(doubles().any(), doubles().any())
                 .assuming((a, b) -> Double.isFinite(a) && Double.isFinite(b))
                 .checkAssert((a, b) -> {
-                    final BinaryArithmetic arithmetic = buildArithmetic(a, b);
+                    final BinaryOperator arithmetic = build(a, b);
                     assertTrue(arithmetic.equals(arithmetic));
                 });
     }
@@ -95,15 +95,15 @@ public abstract class BinaryArithmeticTest {
     public final void testCopyEquals() {
         qt().forAll(integers().all(), integers().all())
                 .checkAssert((a, b) -> {
-                    final BinaryArithmetic arithmetic = buildArithmetic(a, b);
-                    final BinaryArithmetic copy = buildArithmetic(a, b);
+                    final BinaryOperator arithmetic = build(a, b);
+                    final BinaryOperator copy = build(a, b);
                     assertTrue(arithmetic.equals(copy));
                 });
         qt().forAll(doubles().any(), doubles().any())
                 .assuming((a, b) -> Double.isFinite(a) && Double.isFinite(b))
                 .checkAssert((a, b) -> {
-                    final BinaryArithmetic arithmetic = buildArithmetic(a, b);
-                    final BinaryArithmetic copy = buildArithmetic(a, b);
+                    final BinaryOperator arithmetic = build(a, b);
+                    final BinaryOperator copy = build(a, b);
                     assertTrue(arithmetic.equals(copy));
                 });
     }
@@ -113,8 +113,8 @@ public abstract class BinaryArithmeticTest {
         qt().forAll(integers().all(), integers().all(), integers().all(), integers().all())
                 .assuming((a, b, c, d) -> !Objects.equals(a, c) && !Objects.equals(b, d))
                 .checkAssert((a, b, c, d) -> {
-                    final BinaryArithmetic ab = buildArithmetic(a, b);
-                    final BinaryArithmetic cd = buildArithmetic(c, d);
+                    final BinaryOperator ab = build(a, b);
+                    final BinaryOperator cd = build(c, d);
                     assertFalse(ab.equals(cd));
                 });
         qt().forAll(doubles().any(), doubles().any(), doubles().any(), doubles().any())
@@ -122,8 +122,8 @@ public abstract class BinaryArithmeticTest {
                         && Double.isFinite(c) && Double.isFinite(d)
                         && !Objects.equals(a, c) && !Objects.equals(b, d))
                 .checkAssert((a, b, c, d) -> {
-                    final BinaryArithmetic ab = buildArithmetic(a, b);
-                    final BinaryArithmetic cd = buildArithmetic(c, d);
+                    final BinaryOperator ab = build(a, b);
+                    final BinaryOperator cd = build(c, d);
                     assertFalse(ab.equals(cd));
                 });
     }
@@ -133,11 +133,11 @@ public abstract class BinaryArithmeticTest {
         qt().forAll(integers().all(), integers().all(), integers().all(), integers().all())
                 .assuming(this::nestingIntegerAssumptions)
                 .checkAssert((a, b, c, d) -> {
-                    final BinaryArithmetic ab = buildArithmetic(a, b);
-                    final BinaryArithmetic cd = buildArithmetic(c, d);
-                    final BinaryArithmetic abc = buildArithmetic(ab, new Value(c));
-                    final BinaryArithmetic cab = buildArithmetic(new Value(c), ab);
-                    final BinaryArithmetic abcd = buildArithmetic(ab, cd);
+                    final BinaryOperator ab = build(a, b);
+                    final BinaryOperator cd = build(c, d);
+                    final BinaryOperator abc = buildArithmetic(ab, new Value(c));
+                    final BinaryOperator cab = buildArithmetic(new Value(c), ab);
+                    final BinaryOperator abcd = buildArithmetic(ab, cd);
                     {
                         BigDecimal expected = predict(predict(a, b), BigDecimal.valueOf(c));
                         assertEquals(expected, abc.resolve());

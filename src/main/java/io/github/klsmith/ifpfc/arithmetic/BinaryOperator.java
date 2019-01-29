@@ -3,39 +3,39 @@ package io.github.klsmith.ifpfc.arithmetic;
 import java.math.BigDecimal;
 import java.util.Objects;
 
-public abstract class BinaryArithmetic implements Arithmetic {
+public abstract class BinaryOperator implements Arithmetic {
 
     private final Arithmetic a, b;
 
-    public BinaryArithmetic(int a, int b) {
+    public BinaryOperator(int a, int b) {
         this(new Value(a), new Value(b));
     }
 
-    public BinaryArithmetic(double a, double b) {
+    public BinaryOperator(double a, double b) {
         this(new Value(a), new Value(b));
     }
 
-    public BinaryArithmetic(BigDecimal a, BigDecimal b) {
+    public BinaryOperator(BigDecimal a, BigDecimal b) {
         this(new Value(a), new Value(b));
     }
 
-    public BinaryArithmetic(Arithmetic a, int b) {
+    public BinaryOperator(Arithmetic a, int b) {
         this(a, new Value(b));
     }
 
-    public BinaryArithmetic(int a, Arithmetic b) {
+    public BinaryOperator(int a, Arithmetic b) {
         this(new Value(a), b);
     }
 
-    public BinaryArithmetic(Arithmetic a, double b) {
+    public BinaryOperator(Arithmetic a, double b) {
         this(a, new Value(b));
     }
 
-    public BinaryArithmetic(double a, Arithmetic b) {
+    public BinaryOperator(double a, Arithmetic b) {
         this(new Value(a), b);
     }
 
-    public BinaryArithmetic(Arithmetic a, Arithmetic b) {
+    public BinaryOperator(Arithmetic a, Arithmetic b) {
         this.a = a;
         this.b = b;
     }
@@ -66,7 +66,7 @@ public abstract class BinaryArithmetic implements Arithmetic {
             return false;
         }
         if (obj.getClass().equals(getClass())) {
-            final BinaryArithmetic other = (BinaryArithmetic) obj;
+            final BinaryOperator other = (BinaryOperator) obj;
             return Objects.equals(getA(), other.getA())
                     && Objects.equals(getB(), other.getB());
         }

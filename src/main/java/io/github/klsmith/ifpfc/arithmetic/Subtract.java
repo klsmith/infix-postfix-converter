@@ -2,7 +2,7 @@ package io.github.klsmith.ifpfc.arithmetic;
 
 import java.math.BigDecimal;
 
-public class Subtract extends BinaryArithmetic {
+public class Subtract extends BinaryOperator {
 
     public Subtract(int a, int b) {
         super(a, b);

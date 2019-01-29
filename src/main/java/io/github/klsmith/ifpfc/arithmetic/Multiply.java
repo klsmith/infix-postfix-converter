@@ -2,7 +2,7 @@ package io.github.klsmith.ifpfc.arithmetic;
 
 import java.math.BigDecimal;
 
-public class Multiply extends BinaryArithmetic {
+public class Multiply extends BinaryOperator {
 
     public Multiply(int a, int b) {
         super(a, b);

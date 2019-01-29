@@ -2,7 +2,7 @@ package io.github.klsmith.ifpfc.arithmetic;
 
 import java.math.BigDecimal;
 
-public class DivideTest extends BinaryArithmeticTest {
+public class DivideTest extends BinaryOperatorTest {
 
     @Override
     protected BigDecimal predict(BigDecimal a, BigDecimal b) {
@@ -10,7 +10,7 @@ public class DivideTest extends BinaryArithmeticTest {
     }
 
     @Override
-    protected BinaryArithmetic buildArithmetic(Arithmetic a, Arithmetic b) {
+    protected BinaryOperator buildArithmetic(Arithmetic a, Arithmetic b) {
         return new Divide(a, b);
     }
 

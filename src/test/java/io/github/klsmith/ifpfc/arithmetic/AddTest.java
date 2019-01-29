@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 import org.junit.Test;
 import org.quicktheories.core.Gen;
 
-public class AddTest extends BinaryArithmeticTest {
+public class AddTest extends BinaryOperatorTest {
 
     @Override
     protected BigDecimal predict(BigDecimal a, BigDecimal b) {
@@ -17,7 +17,7 @@ public class AddTest extends BinaryArithmeticTest {
     }
 
     @Override
-    protected BinaryArithmetic buildArithmetic(Arithmetic a, Arithmetic b) {
+    protected BinaryOperator buildArithmetic(Arithmetic a, Arithmetic b) {
         return new Add(a, b);
     }
 
