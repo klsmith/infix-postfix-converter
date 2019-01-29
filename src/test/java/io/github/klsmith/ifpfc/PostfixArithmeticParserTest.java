@@ -37,18 +37,21 @@ public class PostfixArithmeticParserTest {
         return String.join(" ", strings);
     }
 
-    public void testSimple(BiFunction<Integer, Integer, Arithmetic> intConstructor,
-            BiFunction<Double, Double, Arithmetic> doubleConstructor, String operator) {
+    public void testSimple(BiFunction<Arithmetic, Arithmetic, Arithmetic> constructor, String operator) {
         qt().forAll(integers().all(), integers().all())
                 .checkAssert((a, b) -> {
-                    final Arithmetic expected = intConstructor.apply(a, b);
+                    final Arithmetic expected = constructor.apply(
+                            new Value(a),
+                            new Value(b));
                     final Arithmetic actual = parser.parse(withSpaces(a, b, operator));
                     assertEquals(expected, actual);
                 });
         qt().forAll(doubles().any(), doubles().any())
                 .assuming(this::assumeFiniteDoubles)
                 .checkAssert((a, b) -> {
-                    final Arithmetic expected = doubleConstructor.apply(a, b);
+                    final Arithmetic expected = constructor.apply(
+                            new Value(a),
+                            new Value(b));
                     final Arithmetic actual = parser.parse(withSpaces(a, b, operator));
                     assertEquals(expected, actual);
                 });
@@ -94,7 +97,7 @@ public class PostfixArithmeticParserTest {
 
     @Test
     public void testSimpleAddition() {
-        testSimple(Add::new, Add::new, "+");
+        testSimple(Add::new, "+");
     }
 
     @Test
@@ -104,7 +107,7 @@ public class PostfixArithmeticParserTest {
 
     @Test
     public void testSimpleSubtraction() {
-        testSimple(Subtract::new, Subtract::new, "-");
+        testSimple(Subtract::new, "-");
     }
 
     @Test
@@ -114,7 +117,7 @@ public class PostfixArithmeticParserTest {
 
     @Test
     public void testSimpleMultiplication() {
-        testSimple(Multiply::new, Multiply::new, "*");
+        testSimple(Multiply::new, "*");
     }
 
     @Test
@@ -124,7 +127,7 @@ public class PostfixArithmeticParserTest {
 
     @Test
     public void testSimpleDivision() {
-        testSimple(Divide::new, Divide::new, "/");
+        testSimple(Divide::new, "/");
     }
 
     @Test
