@@ -14,6 +14,7 @@ import io.github.klsmith.ifpfc.arithmetic.Arithmetic;
 import io.github.klsmith.ifpfc.arithmetic.Divide;
 import io.github.klsmith.ifpfc.arithmetic.Multiply;
 import io.github.klsmith.ifpfc.arithmetic.Subtract;
+import io.github.klsmith.ifpfc.arithmetic.Value;
 
 public class PostfixArithmeticParserTest {
 
@@ -53,23 +54,21 @@ public class PostfixArithmeticParserTest {
                 });
     }
 
-    @Test
-    public void testSimpleAddition() {
-        testSimple(Add::new, Add::new, "+");
-    }
-
-    @Test
-    public void testSingleNestedAddition() {
+    private void testSingleNested(BiFunction<Arithmetic, Arithmetic, Arithmetic> constructor, String operator) {
         qt().forAll(integers().all(), integers().all(), integers().all())
                 .checkAssert((a, b, c) -> {
                     {
-                        final Arithmetic expected = new Add(new Add(a, b), c);
-                        final Arithmetic actual = parser.parse(withSpaces(a, b, "+", c, "+"));
+                        final Arithmetic expected = constructor.apply(
+                                constructor.apply(new Value(a), new Value(b)),
+                                new Value(c));
+                        final Arithmetic actual = parser.parse(withSpaces(a, b, operator, c, operator));
                         assertEquals(expected, actual);
                     }
                     {
-                        final Arithmetic expected = new Add(a, new Add(b, c));
-                        final Arithmetic actual = parser.parse(withSpaces(a, b, c, "+", "+"));
+                        final Arithmetic expected = constructor.apply(
+                                new Value(a),
+                                constructor.apply(new Value(b), new Value(c)));
+                        final Arithmetic actual = parser.parse(withSpaces(a, b, c, operator, operator));
                         assertEquals(expected, actual);
                     }
                 });
@@ -77,16 +76,30 @@ public class PostfixArithmeticParserTest {
                 .assuming(this::assumeFiniteDoubles)
                 .checkAssert((a, b, c) -> {
                     {
-                        final Arithmetic expected = new Add(new Add(a, b), c);
-                        final Arithmetic actual = parser.parse(withSpaces(a, b, "+", c, "+"));
+                        final Arithmetic expected = constructor.apply(
+                                constructor.apply(new Value(a), new Value(b)),
+                                new Value(c));
+                        final Arithmetic actual = parser.parse(withSpaces(a, b, operator, c, operator));
                         assertEquals(expected, actual);
                     }
                     {
-                        final Arithmetic expected = new Add(a, new Add(b, c));
-                        final Arithmetic actual = parser.parse(withSpaces(a, b, c, "+", "+"));
+                        final Arithmetic expected = constructor.apply(
+                                new Value(a),
+                                constructor.apply(new Value(b), new Value(c)));
+                        final Arithmetic actual = parser.parse(withSpaces(a, b, c, operator, operator));
                         assertEquals(expected, actual);
                     }
                 });
+    }
+
+    @Test
+    public void testSimpleAddition() {
+        testSimple(Add::new, Add::new, "+");
+    }
+
+    @Test
+    public void testSingleNestedAddition() {
+        testSingleNested(Add::new, "+");
     }
 
     @Test
@@ -96,33 +109,7 @@ public class PostfixArithmeticParserTest {
 
     @Test
     public void testSingleNestedSubtraction() {
-        qt().forAll(integers().all(), integers().all(), integers().all())
-                .checkAssert((a, b, c) -> {
-                    {
-                        final Arithmetic expected = new Subtract(new Subtract(a, b), c);
-                        final Arithmetic actual = parser.parse(withSpaces(a, b, "-", c, "-"));
-                        assertEquals(expected, actual);
-                    }
-                    {
-                        final Arithmetic expected = new Subtract(a, new Subtract(b, c));
-                        final Arithmetic actual = parser.parse(withSpaces(a, b, c, "-", "-"));
-                        assertEquals(expected, actual);
-                    }
-                });
-        qt().forAll(doubles().any(), doubles().any(), doubles().any())
-                .assuming(this::assumeFiniteDoubles)
-                .checkAssert((a, b, c) -> {
-                    {
-                        final Arithmetic expected = new Subtract(new Subtract(a, b), c);
-                        final Arithmetic actual = parser.parse(withSpaces(a, b, "-", c, "-"));
-                        assertEquals(expected, actual);
-                    }
-                    {
-                        final Arithmetic expected = new Subtract(a, new Subtract(b, c));
-                        final Arithmetic actual = parser.parse(withSpaces(a, b, c, "-", "-"));
-                        assertEquals(expected, actual);
-                    }
-                });
+        testSingleNested(Subtract::new, "-");
     }
 
     @Test
@@ -132,33 +119,7 @@ public class PostfixArithmeticParserTest {
 
     @Test
     public void testSingleNestedMultiplication() {
-        qt().forAll(integers().all(), integers().all(), integers().all())
-                .checkAssert((a, b, c) -> {
-                    {
-                        final Arithmetic expected = new Multiply(new Multiply(a, b), c);
-                        final Arithmetic actual = parser.parse(withSpaces(a, b, "*", c, "*"));
-                        assertEquals(expected, actual);
-                    }
-                    {
-                        final Arithmetic expected = new Multiply(a, new Multiply(b, c));
-                        final Arithmetic actual = parser.parse(withSpaces(a, b, c, "*", "*"));
-                        assertEquals(expected, actual);
-                    }
-                });
-        qt().forAll(doubles().any(), doubles().any(), doubles().any())
-                .assuming(this::assumeFiniteDoubles)
-                .checkAssert((a, b, c) -> {
-                    {
-                        final Arithmetic expected = new Multiply(new Multiply(a, b), c);
-                        final Arithmetic actual = parser.parse(withSpaces(a, b, "*", c, "*"));
-                        assertEquals(expected, actual);
-                    }
-                    {
-                        final Arithmetic expected = new Multiply(a, new Multiply(b, c));
-                        final Arithmetic actual = parser.parse(withSpaces(a, b, c, "*", "*"));
-                        assertEquals(expected, actual);
-                    }
-                });
+        testSingleNested(Multiply::new, "*");
     }
 
     @Test
@@ -168,33 +129,7 @@ public class PostfixArithmeticParserTest {
 
     @Test
     public void testSingleNestedDivision() {
-        qt().forAll(integers().all(), integers().all(), integers().all())
-                .checkAssert((a, b, c) -> {
-                    {
-                        final Arithmetic expected = new Divide(new Divide(a, b), c);
-                        final Arithmetic actual = parser.parse(withSpaces(a, b, "/", c, "/"));
-                        assertEquals(expected, actual);
-                    }
-                    {
-                        final Arithmetic expected = new Divide(a, new Divide(b, c));
-                        final Arithmetic actual = parser.parse(withSpaces(a, b, c, "/", "/"));
-                        assertEquals(expected, actual);
-                    }
-                });
-        qt().forAll(doubles().any(), doubles().any(), doubles().any())
-                .assuming(this::assumeFiniteDoubles)
-                .checkAssert((a, b, c) -> {
-                    {
-                        final Arithmetic expected = new Divide(new Divide(a, b), c);
-                        final Arithmetic actual = parser.parse(withSpaces(a, b, "/", c, "/"));
-                        assertEquals(expected, actual);
-                    }
-                    {
-                        final Arithmetic expected = new Divide(a, new Divide(b, c));
-                        final Arithmetic actual = parser.parse(withSpaces(a, b, c, "/", "/"));
-                        assertEquals(expected, actual);
-                    }
-                });
+        testSingleNested(Divide::new, "/");
     }
 
 }
