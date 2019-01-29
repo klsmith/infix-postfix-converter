@@ -100,6 +100,37 @@ public class PostfixArithmeticParserTest {
     }
 
     @Test
+    public void testSingleNestedSubtraction() {
+        qt().forAll(integers().all(), integers().all(), integers().all())
+                .checkAssert((a, b, c) -> {
+                    {
+                        final Arithmetic expected = new Subtract(new Subtract(a, b), c);
+                        final Arithmetic actual = parser.parse(withSpaces(a, b, "-", c, "-"));
+                        assertEquals(expected, actual);
+                    }
+                    {
+                        final Arithmetic expected = new Subtract(a, new Subtract(b, c));
+                        final Arithmetic actual = parser.parse(withSpaces(a, b, c, "-", "-"));
+                        assertEquals(expected, actual);
+                    }
+                });
+        qt().forAll(doubles().any(), doubles().any(), doubles().any())
+                .assuming(this::assumeFiniteDoubles)
+                .checkAssert((a, b, c) -> {
+                    {
+                        final Arithmetic expected = new Subtract(new Subtract(a, b), c);
+                        final Arithmetic actual = parser.parse(withSpaces(a, b, "-", c, "-"));
+                        assertEquals(expected, actual);
+                    }
+                    {
+                        final Arithmetic expected = new Subtract(a, new Subtract(b, c));
+                        final Arithmetic actual = parser.parse(withSpaces(a, b, c, "-", "-"));
+                        assertEquals(expected, actual);
+                    }
+                });
+    }
+
+    @Test
     public void testSimpleMultiplication() {
         qt().forAll(integers().all(), integers().all())
                 .checkAssert((a, b) -> {
