@@ -11,48 +11,49 @@ import io.github.klsmith.ifpfc.arithmetic.Arithmetic;
 import io.github.klsmith.ifpfc.arithmetic.Divide;
 import io.github.klsmith.ifpfc.arithmetic.Multiply;
 import io.github.klsmith.ifpfc.arithmetic.Subtract;
+import io.github.klsmith.ifpfc.arithmetic.Value;
 
 public class PostfixArithmeticParser implements ArithmeticParser {
 
     @Override
     public Arithmetic parse(String input) {
-        final Deque<BigDecimal> stack = new LinkedList<>();
-        Arithmetic result = null;
+        final Deque<Arithmetic> stack = new LinkedList<>();
         try (final Scanner scanner = new Scanner(input.trim())) {
             scanner.useDelimiter(" ");
             while (scanner.hasNext()) {
                 final String token = scanner.next();
-                final Optional<BigDecimal> value = parseValue(token);
+                final Optional<Value> value = parseValue(token);
                 if (value.isPresent()) {
                     stack.push(value.get());
                     continue;
                 }
-                final BigDecimal b = stack.pop();
-                final BigDecimal a = stack.pop();
+                final Arithmetic b = stack.pop();
+                final Arithmetic a = stack.pop();
                 switch (token) {
                     case "+":
-                        result = new Add(a, b);
+                        stack.push(new Add(a, b));
                         break;
                     case "-":
-                        result = new Subtract(a, b);
+                        stack.push(new Subtract(a, b));
                         break;
                     case "*":
-                        result = new Multiply(a, b);
+                        stack.push(new Multiply(a, b));
                         break;
                     case "/":
-                        result = new Divide(a, b);
+                        stack.push(new Divide(a, b));
                     default:
                         break;
                 }
             }
         }
-        return result;
+        return stack.pop();
     }
 
-    private Optional<BigDecimal> parseValue(String token) {
+    private Optional<Value> parseValue(String token) {
         try {
-            return Optional.of(new BigDecimal(token));
-        } catch (NumberFormatException e) {
+            return Optional.of(new Value(new BigDecimal(token)));
+        }
+        catch (NumberFormatException e) {
             // handled with empty return below
         }
         return Optional.empty();

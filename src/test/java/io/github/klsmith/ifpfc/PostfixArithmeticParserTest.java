@@ -35,6 +35,14 @@ public class PostfixArithmeticParserTest {
         return Double.isFinite(a) && Double.isFinite(b);
     }
 
+    private String withSpaces(Object... objects) {
+        String[] strings = new String[objects.length];
+        for (int i = 0; i < objects.length; i++) {
+            strings[i] = objects[i].toString();
+        }
+        return String.join(" ", strings);
+    }
+
     @Test
     public void testSimpleAddition() {
         qt().forAll(integers().all(), integers().all())
@@ -48,6 +56,16 @@ public class PostfixArithmeticParserTest {
                 .checkAssert((a, b) -> {
                     final Arithmetic expected = new Add(a, b);
                     final Arithmetic actual = parser.parse(toPostfixString(a, b, "+"));
+                    assertEquals(expected, actual);
+                });
+    }
+
+    @Test
+    public void testSingleNestedAddition() {
+        qt().forAll(integers().all(), integers().all(), integers().all())
+                .checkAssert((a, b, c) -> {
+                    final Arithmetic expected = new Add(new Add(a, b), c);
+                    final Arithmetic actual = parser.parse(withSpaces(a, b, "+", c, "+"));
                     assertEquals(expected, actual);
                 });
     }
