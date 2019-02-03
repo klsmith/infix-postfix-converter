@@ -1,5 +1,6 @@
 package io.github.klsmith.ifpfc;
 
+import static io.github.klsmith.ifpfc.PostfixTestHelper.withSpaces;
 import static org.junit.Assert.assertEquals;
 import static org.quicktheories.QuickTheory.qt;
 import static org.quicktheories.generators.SourceDSL.doubles;
@@ -20,25 +21,6 @@ public class PostfixArithmeticParserTest {
 
     private final ArithmeticParser parser = new PostfixArithmeticParser();
 
-    /* Utility Methods */
-
-    private boolean assumeFiniteDoubles(Double... doubles) {
-        for (Double doubleVal : doubles) {
-            if (!Double.isFinite(doubleVal)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    private String withSpaces(Object... objects) {
-        String[] strings = new String[objects.length];
-        for (int i = 0; i < objects.length; i++) {
-            strings[i] = objects[i].toString();
-        }
-        return String.join(" ", strings);
-    }
-
     /* Abstract Testing Methods */
 
     public void testSimple(BiFunction<Arithmetic, Arithmetic, Arithmetic> constructor, String operator) {
@@ -51,7 +33,7 @@ public class PostfixArithmeticParserTest {
                     assertEquals(expected, actual);
                 });
         qt().forAll(doubles().any(), doubles().any())
-                .assuming(this::assumeFiniteDoubles)
+                .assuming(PostfixTestHelper::assumeFiniteDoubles)
                 .checkAssert((a, b) -> {
                     final Arithmetic expected = constructor.apply(
                             new Value(a),
@@ -80,7 +62,7 @@ public class PostfixArithmeticParserTest {
                     }
                 });
         qt().forAll(doubles().any(), doubles().any(), doubles().any())
-                .assuming(this::assumeFiniteDoubles)
+                .assuming(PostfixTestHelper::assumeFiniteDoubles)
                 .checkAssert((a, b, c) -> {
                     {
                         final Arithmetic expected = constructor.apply(
@@ -109,7 +91,7 @@ public class PostfixArithmeticParserTest {
                     assertEquals(expected, actual);
                 });
         qt().forAll(doubles().any(), doubles().any(), doubles().any(), doubles().any())
-                .assuming(this::assumeFiniteDoubles)
+                .assuming(PostfixTestHelper::assumeFiniteDoubles)
                 .checkAssert((a, b, c, d) -> {
                     final Arithmetic expected = constructor.apply(
                             constructor.apply(new Value(a), new Value(b)),
