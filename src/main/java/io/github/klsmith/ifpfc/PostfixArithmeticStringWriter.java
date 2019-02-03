@@ -8,20 +8,15 @@ public class PostfixArithmeticStringWriter implements ArithmeticStringWriter {
 
     @Override
     public String write(Arithmetic arithmetic) {
-        final StringBuilder builder = new StringBuilder();
-        write(builder, arithmetic);
-        return builder.toString();
-    }
-
-    private void write(StringBuilder builder, Arithmetic arithmetic) {
         if (arithmetic instanceof Value) {
             final Value value = (Value) arithmetic;
-            builder.append(value);
+            return value.toString();
         }
         if (arithmetic instanceof Add) {
             final Add add = (Add) arithmetic;
-            builder.append(String.join(" ", write(add.getA()), write(add.getB()), "+"));
+            return String.join(" ", write(add.getA()), write(add.getB()), "+");
         }
+        return "";
     }
 
 }
