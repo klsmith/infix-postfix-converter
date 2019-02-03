@@ -2,7 +2,7 @@ package io.github.klsmith.ifpfc;
 
 import java.math.BigDecimal;
 
-public class PostfixTestHelper {
+public class TestHelper {
 
     public static boolean assumeFiniteDoubles(Double... doubles) {
         for (Double doubleVal : doubles) {

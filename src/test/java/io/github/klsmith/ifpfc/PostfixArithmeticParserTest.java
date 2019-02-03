@@ -1,6 +1,6 @@
 package io.github.klsmith.ifpfc;
 
-import static io.github.klsmith.ifpfc.PostfixTestHelper.withSpaces;
+import static io.github.klsmith.ifpfc.TestHelper.withSpaces;
 import static org.junit.Assert.assertEquals;
 import static org.quicktheories.QuickTheory.qt;
 import static org.quicktheories.generators.SourceDSL.doubles;
@@ -33,7 +33,7 @@ public class PostfixArithmeticParserTest {
                     assertEquals(expected, actual);
                 });
         qt().forAll(doubles().any(), doubles().any())
-                .assuming(PostfixTestHelper::assumeFiniteDoubles)
+                .assuming(TestHelper::assumeFiniteDoubles)
                 .checkAssert((a, b) -> {
                     final Arithmetic expected = constructor.apply(
                             new Value(a),
@@ -62,7 +62,7 @@ public class PostfixArithmeticParserTest {
                     }
                 });
         qt().forAll(doubles().any(), doubles().any(), doubles().any())
-                .assuming(PostfixTestHelper::assumeFiniteDoubles)
+                .assuming(TestHelper::assumeFiniteDoubles)
                 .checkAssert((a, b, c) -> {
                     {
                         final Arithmetic expected = constructor.apply(
@@ -91,7 +91,7 @@ public class PostfixArithmeticParserTest {
                     assertEquals(expected, actual);
                 });
         qt().forAll(doubles().any(), doubles().any(), doubles().any(), doubles().any())
-                .assuming(PostfixTestHelper::assumeFiniteDoubles)
+                .assuming(TestHelper::assumeFiniteDoubles)
                 .checkAssert((a, b, c, d) -> {
                     final Arithmetic expected = constructor.apply(
                             constructor.apply(new Value(a), new Value(b)),
