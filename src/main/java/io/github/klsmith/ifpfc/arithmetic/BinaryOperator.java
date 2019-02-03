@@ -40,11 +40,11 @@ public abstract class BinaryOperator implements Arithmetic {
         this.b = b;
     }
 
-    protected Arithmetic getA() {
+    public Arithmetic getA() {
         return a;
     }
 
-    protected Arithmetic getB() {
+    public Arithmetic getB() {
         return b;
     }
 
