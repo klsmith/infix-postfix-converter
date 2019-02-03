@@ -107,68 +107,68 @@ public class PostfixArithmeticStringWriterTest {
 
     @Test
     public void testSimpleAddition() {
-        testSimple(Add::new, "+");
+        testSimple(Add::new, Add.SYMBOL);
     }
 
     @Test
     public void testSingleNestedAddition() {
-        testSingleNested(Add::new, "+");
+        testSingleNested(Add::new, Add.SYMBOL);
     }
 
     @Test
     public void testDoubleNestedAddition() {
-        testDoubleNested(Add::new, "+");
+        testDoubleNested(Add::new, Add.SYMBOL);
     }
 
     /* Subtraction Tests */
 
     @Test
     public void testSimpleSubtraction() {
-        testSimple(Subtract::new, "-");
+        testSimple(Subtract::new, Subtract.SYMBOL);
     }
 
     @Test
     public void testSingleNestedSubtraction() {
-        testSingleNested(Subtract::new, "-");
+        testSingleNested(Subtract::new, Subtract.SYMBOL);
     }
 
     @Test
     public void testDoubleNestedSubtraction() {
-        testDoubleNested(Subtract::new, "-");
+        testDoubleNested(Subtract::new, Subtract.SYMBOL);
     }
 
     /* Multiplication Tests */
 
     @Test
     public void testSimpleMultiplication() {
-        testSimple(Multiply::new, "*");
+        testSimple(Multiply::new, Multiply.SYMBOL);
     }
 
     @Test
     public void testSingleNestedMultiplication() {
-        testSingleNested(Multiply::new, "*");
+        testSingleNested(Multiply::new, Multiply.SYMBOL);
     }
 
     @Test
     public void testDoubleNestedMultiplication() {
-        testDoubleNested(Multiply::new, "*");
+        testDoubleNested(Multiply::new, Multiply.SYMBOL);
     }
 
     /* Division Tests */
 
     @Test
     public void testSimpleDivision() {
-        testSimple(Divide::new, "/");
+        testSimple(Divide::new, Divide.SYMBOL);
     }
 
     @Test
     public void testSingleNestedDivision() {
-        testSingleNested(Divide::new, "/");
+        testSingleNested(Divide::new, Divide.SYMBOL);
     }
 
     @Test
     public void testDoubleNestedDivision() {
-        testDoubleNested(Divide::new, "/");
+        testDoubleNested(Divide::new, Divide.SYMBOL);
     }
 
 }
