@@ -5,6 +5,7 @@ import java.math.RoundingMode;
 
 public class Divide extends BinaryOperator {
 
+    public static final String SYMBOL = "/";
     public static final RoundingMode DEFAULT_ROUNDING_MODE = RoundingMode.UP;
 
     public Divide(int a, int b) {
@@ -42,6 +43,11 @@ public class Divide extends BinaryOperator {
     @Override
     protected BigDecimal resolve(BigDecimal a, BigDecimal b) {
         return a.divide(b, DEFAULT_ROUNDING_MODE);
+    }
+
+    @Override
+    public String getSymbol() {
+        return SYMBOL;
     }
 
 }

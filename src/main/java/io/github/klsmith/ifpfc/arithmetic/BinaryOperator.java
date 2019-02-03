@@ -48,6 +48,8 @@ public abstract class BinaryOperator implements Arithmetic {
         return b;
     }
 
+    public abstract String getSymbol();
+
     @Override
     public final BigDecimal resolve() {
         return resolve(getA().resolve(), getB().resolve());

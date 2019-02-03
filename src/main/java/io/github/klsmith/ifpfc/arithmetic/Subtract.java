@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 
 public class Subtract extends BinaryOperator {
 
+    public static final String SYMBOL = "-";
+    
     public Subtract(int a, int b) {
         super(a, b);
     }
@@ -39,6 +41,11 @@ public class Subtract extends BinaryOperator {
     @Override
     protected BigDecimal resolve(BigDecimal a, BigDecimal b) {
         return a.subtract(b);
+    }
+
+    @Override
+    public String getSymbol() {
+        return SYMBOL;
     }
 
 }

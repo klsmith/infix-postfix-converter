@@ -1,7 +1,7 @@
 package io.github.klsmith.ifpfc;
 
-import io.github.klsmith.ifpfc.arithmetic.Add;
 import io.github.klsmith.ifpfc.arithmetic.Arithmetic;
+import io.github.klsmith.ifpfc.arithmetic.BinaryOperator;
 import io.github.klsmith.ifpfc.arithmetic.Value;
 
 public class PostfixArithmeticStringWriter implements ArithmeticStringWriter {
@@ -12,9 +12,12 @@ public class PostfixArithmeticStringWriter implements ArithmeticStringWriter {
             final Value value = (Value) arithmetic;
             return value.toString();
         }
-        if (arithmetic instanceof Add) {
-            final Add add = (Add) arithmetic;
-            return String.join(" ", write(add.getA()), write(add.getB()), "+");
+        if (arithmetic instanceof BinaryOperator) {
+            final BinaryOperator binaryOperator = (BinaryOperator) arithmetic;
+            return String.join(" ",
+                    write(binaryOperator.getA()),
+                    write(binaryOperator.getB()),
+                    binaryOperator.getSymbol());
         }
         return "";
     }
