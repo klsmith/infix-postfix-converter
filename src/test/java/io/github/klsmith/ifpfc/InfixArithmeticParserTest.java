@@ -91,6 +91,31 @@ public class InfixArithmeticParserTest {
                 });
     }
 
+    private void testDoubleNestedParenthesis(BiFunction<Arithmetic, Arithmetic, Arithmetic> constructor,
+            String operator) {
+        qt().forAll(integers().all(), integers().all(), integers().all(), integers().all())
+                .checkAssert((a, b, c, d) -> {
+                    final Arithmetic expected = constructor.apply(
+                            constructor.apply(new Value(a), new Value(b)),
+                            constructor.apply(new Value(c), new Value(d)));
+                    final Arithmetic actual = parser.parse(
+                            withSpaces("(", a, operator, b, ")",
+                                    operator, "(", c, operator, d, ")"));
+                    assertEquals(expected, actual);
+                });
+        qt().forAll(doubles().any(), doubles().any(), doubles().any(), doubles().any())
+                .assuming(TestHelper::assumeFiniteDoubles)
+                .checkAssert((a, b, c, d) -> {
+                    final Arithmetic expected = constructor.apply(
+                            constructor.apply(new Value(a), new Value(b)),
+                            constructor.apply(new Value(c), new Value(d)));
+                    final Arithmetic actual = parser.parse(
+                            withSpaces("(", a, operator, b, ")",
+                                    operator, "(", c, operator, d, ")"));
+                    assertEquals(expected, actual);
+                });
+    }
+
     /* Addition Tests */
 
     @Test
@@ -106,6 +131,11 @@ public class InfixArithmeticParserTest {
     @Test
     public void testDoubleNestedAddition() {
         testDoubleNested(Add::new, Add.SYMBOL);
+    }
+
+    @Test
+    public void testDoubleNestedParenthesis() {
+        testDoubleNestedParenthesis(Add::new, Add.SYMBOL);
     }
 
     /* Subtraction Tests */
