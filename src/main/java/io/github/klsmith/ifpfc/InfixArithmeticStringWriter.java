@@ -15,9 +15,26 @@ public class InfixArithmeticStringWriter implements ArithmeticStringWriter {
         if (arithmetic instanceof BinaryOperator) {
             final BinaryOperator binaryOperator = (BinaryOperator) arithmetic;
             return String.join(" ",
-                    write(binaryOperator.getA()),
+                    writeNested(binaryOperator.getA()),
                     binaryOperator.getSymbol(),
-                    write(binaryOperator.getB()));
+                    writeNested(binaryOperator.getB()));
+        }
+        return "";
+    }
+
+    public String writeNested(Arithmetic arithmetic) {
+        if (arithmetic instanceof Value) {
+            final Value value = (Value) arithmetic;
+            return value.toString();
+        }
+        if (arithmetic instanceof BinaryOperator) {
+            final BinaryOperator binaryOperator = (BinaryOperator) arithmetic;
+            return String.join(" ",
+                    "(",
+                    writeNested(binaryOperator.getA()),
+                    binaryOperator.getSymbol(),
+                    writeNested(binaryOperator.getB()),
+                    ")");
         }
         return "";
     }

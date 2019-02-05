@@ -46,27 +46,45 @@ public class InfixArithmeticStringWriterTest {
     private void testSingleNested(BiFunction<Arithmetic, Arithmetic, Arithmetic> constructor, String operator) {
         qt().forAll(integers().all(), integers().all(), integers().all())
                 .checkAssert((a, b, c) -> {
-                    final String expected = withSpaces(a, operator, b, operator, c);
-                    final String actual = writer.write(constructor.apply(
-                            constructor.apply(new Value(a), new Value(b)),
-                            new Value(c)));
-                    assertEquals(expected, actual);
+                    {
+                        final String expected = withSpaces("(", a, operator, b, ")", operator, c);
+                        final String actual = writer.write(constructor.apply(
+                                constructor.apply(new Value(a), new Value(b)),
+                                new Value(c)));
+                        assertEquals(expected, actual);
+                    }
+                    {
+                        final String expected = withSpaces(a, operator, "(", b, operator, c, ")");
+                        final String actual = writer.write(constructor.apply(
+                                new Value(a), constructor.apply(new Value(b), new Value(c))));
+                        assertEquals(expected, actual);
+                    }
                 });
         qt().forAll(doubles().any(), doubles().any(), doubles().any())
                 .assuming(TestHelper::assumeFiniteDoubles)
                 .checkAssert((a, b, c) -> {
-                    final String expected = withSpaces(a, operator, b, operator, c);
-                    final String actual = writer.write(constructor.apply(
-                            constructor.apply(new Value(a), new Value(b)),
-                            new Value(c)));
-                    assertEquals(expected, actual);
+                    {
+                        final String expected = withSpaces("(", a, operator, b, ")", operator, c);
+                        final String actual = writer.write(constructor.apply(
+                                constructor.apply(new Value(a), new Value(b)),
+                                new Value(c)));
+                        assertEquals(expected, actual);
+                    }
+                    {
+                        final String expected = withSpaces(a, operator, "(", b, operator, c, ")");
+                        final String actual = writer.write(constructor.apply(
+                                new Value(a), constructor.apply(new Value(b), new Value(c))));
+                        assertEquals(expected, actual);
+                    }
                 });
     }
 
     private void testDoubleNested(BiFunction<Arithmetic, Arithmetic, Arithmetic> constructor, String operator) {
         qt().forAll(integers().all(), integers().all(), integers().all(), integers().all())
                 .checkAssert((a, b, c, d) -> {
-                    final String expected = withSpaces(a, operator, b, operator, c, operator, d);
+                    final String expected = withSpaces(
+                            "(", a, operator, b, ")", operator,
+                            "(", c, operator, d, ")");
                     final String actual = writer.write(constructor.apply(
                             constructor.apply(new Value(a), new Value(b)),
                             constructor.apply(new Value(c), new Value(d))));
@@ -75,7 +93,9 @@ public class InfixArithmeticStringWriterTest {
         qt().forAll(doubles().any(), doubles().any(), doubles().any(), doubles().any())
                 .assuming(TestHelper::assumeFiniteDoubles)
                 .checkAssert((a, b, c, d) -> {
-                    final String expected = withSpaces(a, operator, b, operator, c, operator, d);
+                    final String expected = withSpaces(
+                            "(", a, operator, b, ")", operator,
+                            "(", c, operator, d, ")");
                     final String actual = writer.write(constructor.apply(
                             constructor.apply(new Value(a), new Value(b)),
                             constructor.apply(new Value(c), new Value(d))));
