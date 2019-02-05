@@ -24,7 +24,6 @@ public class InfixToPostfixConverterTest {
     }
 
     @Test
-    @Ignore
     public void testDirect() {
         final Arithmetic arithmetic = new Add(new Add(1, 2), new Add(3, 4));
         final String input = infixWriter.write(arithmetic);
