@@ -3,7 +3,6 @@ package io.github.klsmith.ifpfc;
 import static io.github.klsmith.ifpfc.TestHelper.withSpaces;
 import static org.junit.Assert.assertEquals;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import io.github.klsmith.ifpfc.arithmetic.Add;
