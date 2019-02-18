@@ -2,6 +2,7 @@ package io.github.klsmith.ifpfc.cl.command;
 
 import java.io.PrintStream;
 import java.util.Arrays;
+import java.util.Objects;
 
 import io.github.klsmith.ifpfc.ArithmeticParser;
 import io.github.klsmith.ifpfc.ArithmeticStringWriter;
@@ -11,7 +12,7 @@ import io.github.klsmith.ifpfc.PostfixArithmeticParser;
 import io.github.klsmith.ifpfc.PostfixArithmeticStringWriter;
 import io.github.klsmith.ifpfc.arithmetic.Arithmetic;
 
-public class ConvertCommand implements Command {
+public final class ConvertCommand implements Command {
 
     private final PrintStream out;
     private final Type from;
@@ -50,6 +51,23 @@ public class ConvertCommand implements Command {
         final Arithmetic arithmetic = parser.parse(input);
         final ArithmeticStringWriter writer = to.getWriter();
         return writer.write(arithmetic);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(out, from, to, input);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof ConvertCommand) {
+            final ConvertCommand other = (ConvertCommand) obj;
+            return Objects.equals(out, other.out)
+                    && Objects.equals(from, other.from)
+                    && Objects.equals(to, other.to)
+                    && Objects.equals(input, other.input);
+        }
+        return false;
     }
 
     public static enum Type {

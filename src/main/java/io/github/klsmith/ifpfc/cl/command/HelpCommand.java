@@ -1,8 +1,9 @@
 package io.github.klsmith.ifpfc.cl.command;
 
 import java.io.PrintStream;
+import java.util.Objects;
 
-public class HelpCommand implements Command {
+public final class HelpCommand implements Command {
 
     private final PrintStream out;
 
@@ -18,6 +19,20 @@ public class HelpCommand implements Command {
         out.println("'convert <fromType> <toType> <input>' : ");
         out.println("\tConverts the given input from the <fromType> into the <toType>");
         out.println();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(out);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof HelpCommand) {
+            final HelpCommand other = (HelpCommand) obj;
+            return Objects.equals(out, other.out);
+        }
+        return false;
     }
 
 }

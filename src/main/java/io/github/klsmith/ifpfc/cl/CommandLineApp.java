@@ -7,7 +7,7 @@ import io.github.klsmith.ifpfc.cl.command.Command;
 import io.github.klsmith.ifpfc.cl.command.ConvertCommand;
 import io.github.klsmith.ifpfc.cl.command.ErrorCommand;
 import io.github.klsmith.ifpfc.cl.command.HelpCommand;
-import io.github.klsmith.ifpfc.cl.command.StopCommand;
+import io.github.klsmith.ifpfc.cl.command.ExitCommand;
 
 public class CommandLineApp {
 
@@ -28,8 +28,9 @@ public class CommandLineApp {
         running = true;
         printGreeting();
         while (running) {
-            readCommand(scanner)
-                    .execute();
+            final String input = readInput(scanner);
+            final Command command = readCommand(input);
+            command.execute();
         }
     }
 
@@ -38,15 +39,14 @@ public class CommandLineApp {
         System.out.println("Type 'help' for list of commands.");
     }
 
-    private Command readCommand(Scanner scanner) {
-        final String input = readInput(scanner);
+    protected Command readCommand(String input) {
         final String[] args = input.split(" ");
         if (args.length > 0) {
             final String command = args[0];
             final String[] rest = args.length > 1 ? Arrays.copyOfRange(args, 1, args.length) : null;
             switch (command) {
                 case "exit":
-                    return new StopCommand(this);
+                    return new ExitCommand(this);
                 case "help":
                     return new HelpCommand(System.out);
                 case "convert":
