@@ -8,6 +8,7 @@ import org.quicktheories.core.Gen;
 import org.quicktheories.core.RandomnessSource;
 import org.quicktheories.impl.Constraint;
 
+import io.github.klsmith.ifpfc.TestHelper;
 import io.github.klsmith.ifpfc.cl.command.Command;
 import io.github.klsmith.ifpfc.cl.command.ConvertCommand;
 import io.github.klsmith.ifpfc.cl.command.ConvertCommand.Type;
@@ -37,17 +38,9 @@ public class CommandLineAppTest {
         qt().forAll(typeAny(), typeAny())
                 .checkAssert((from, to) -> {
                     final Command expected = new ConvertCommand(System.out, from, to, "2 + 2");
-                    final Command actual = app.readCommand(toConvertString(from, to, "2 + 2"));
+                    final Command actual = app.readCommand(TestHelper.withSpaces("convert", from, to, "2 + 2"));
                     assertEquals(expected, actual);
                 });
-    }
-
-    private String toConvertString(Type from, Type to, String input) {
-        return String.join(" ",
-                "convert",
-                from.toString().toLowerCase(),
-                to.toString().toLowerCase(),
-                input);
     }
 
     private Gen<Type> typeAny() {
