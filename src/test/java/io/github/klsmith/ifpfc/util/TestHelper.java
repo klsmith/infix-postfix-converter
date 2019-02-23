@@ -1,4 +1,4 @@
-package io.github.klsmith.ifpfc;
+package io.github.klsmith.ifpfc.util;
 
 import java.math.BigDecimal;
 

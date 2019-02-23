@@ -1,6 +1,6 @@
 package io.github.klsmith.ifpfc;
 
-import static io.github.klsmith.ifpfc.TestHelper.withSpaces;
+import static io.github.klsmith.ifpfc.util.TestHelper.withSpaces;
 import static org.junit.Assert.assertEquals;
 import static org.quicktheories.QuickTheory.qt;
 import static org.quicktheories.generators.SourceDSL.doubles;
@@ -16,6 +16,7 @@ import io.github.klsmith.ifpfc.arithmetic.Divide;
 import io.github.klsmith.ifpfc.arithmetic.Multiply;
 import io.github.klsmith.ifpfc.arithmetic.Subtract;
 import io.github.klsmith.ifpfc.arithmetic.Value;
+import io.github.klsmith.ifpfc.util.TestHelper;
 
 public class InfixArithmeticStringWriterTest {
 

@@ -5,15 +5,14 @@ import static org.quicktheories.QuickTheory.qt;
 
 import org.junit.Test;
 import org.quicktheories.core.Gen;
-import org.quicktheories.core.RandomnessSource;
-import org.quicktheories.impl.Constraint;
 
-import io.github.klsmith.ifpfc.TestHelper;
 import io.github.klsmith.ifpfc.cl.command.Command;
 import io.github.klsmith.ifpfc.cl.command.ConvertCommand;
 import io.github.klsmith.ifpfc.cl.command.ConvertCommand.Type;
 import io.github.klsmith.ifpfc.cl.command.ExitCommand;
 import io.github.klsmith.ifpfc.cl.command.HelpCommand;
+import io.github.klsmith.ifpfc.util.ChooserGen;
+import io.github.klsmith.ifpfc.util.TestHelper;
 
 public class CommandLineAppTest {
 
@@ -35,25 +34,13 @@ public class CommandLineAppTest {
 
     @Test
     public void testConvertCommand() {
-        qt().forAll(typeAny(), typeAny())
+        final Gen<Type> anyType = ChooserGen.from(Type.values());
+        qt().forAll(anyType, anyType)
                 .checkAssert((from, to) -> {
                     final Command expected = new ConvertCommand(System.out, from, to, "2 + 2");
                     final Command actual = app.readCommand(TestHelper.withSpaces("convert", from, to, "2 + 2"));
                     assertEquals(expected, actual);
                 });
-    }
-
-    private Gen<Type> typeAny() {
-        return new Gen<Type>() {
-
-            @Override
-            public Type generate(RandomnessSource random) {
-                final Type[] types = Type.values();
-                final int index = (int) random.next(Constraint.between(0, types.length - 1));
-                return types[index];
-            }
-
-        };
     }
 
 }
