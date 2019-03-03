@@ -8,7 +8,6 @@ import static org.quicktheories.generators.SourceDSL.integers;
 
 import java.util.function.BiFunction;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import io.github.klsmith.ifpfc.arithmetic.Add;
@@ -194,20 +193,22 @@ public class InfixArithmeticParserTest {
     /* Advanced Test */
 
     @Test
-    public void testParseSimplePemdas() {
-        {
-            final int a = 1;
-            final int b = 2;
-            final int c = 3;
-            final String input = withSpaces(a, "+", b, "*", c);
-            final Arithmetic expected = new Add(a, new Multiply(b, c));
-            final Arithmetic actual = parser.parse(input);
-            assertEquals(expected, actual);
-        }
+    public void testSimplePemdas() {
         qt().forAll(integers().all(), integers().all(), integers().all())
                 .checkAssert((a, b, c) -> {
                     final String input = withSpaces(a, "+", b, "*", c);
                     final Arithmetic expected = new Add(a, new Multiply(b, c));
+                    final Arithmetic actual = parser.parse(input);
+                    assertEquals(expected, actual);
+                });
+    }
+
+    @Test
+    public void testParenthesisPemdas() {
+        qt().forAll(integers().all(), integers().all(), integers().all(), integers().all())
+                .checkAssert((a, b, c, d) -> {
+                    final String input = withSpaces(a, "-", "(", b, "/", c, ")", "+", d);
+                    final Arithmetic expected = new Subtract(a, new Add(new Divide(b, c), d));
                     final Arithmetic actual = parser.parse(input);
                     assertEquals(expected, actual);
                 });
