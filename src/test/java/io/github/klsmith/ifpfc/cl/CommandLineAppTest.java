@@ -11,6 +11,7 @@ import io.github.klsmith.ifpfc.cl.command.ConvertCommand;
 import io.github.klsmith.ifpfc.cl.command.ConvertCommand.Type;
 import io.github.klsmith.ifpfc.cl.command.ExitCommand;
 import io.github.klsmith.ifpfc.cl.command.HelpCommand;
+import io.github.klsmith.ifpfc.cl.command.ResolveCommand;
 import io.github.klsmith.ifpfc.util.ChooserGen;
 import io.github.klsmith.ifpfc.util.TestHelper;
 
@@ -39,6 +40,17 @@ public class CommandLineAppTest {
                 .checkAssert((from, to) -> {
                     final Command expected = new ConvertCommand(System.out, from, to, "2 + 2");
                     final Command actual = app.readCommand(TestHelper.withSpaces("convert", from, to, "2 + 2"));
+                    assertEquals(expected, actual);
+                });
+    }
+
+    @Test
+    public void testResolveCommand() {
+        final Gen<Type> anyType = ChooserGen.from(Type.values());
+        qt().forAll(anyType)
+                .checkAssert(type -> {
+                    final Command expected = new ResolveCommand(System.out, type, "2 + 2");
+                    final Command actual = app.readCommand(TestHelper.withSpaces("resolve", type, "2 + 2"));
                     assertEquals(expected, actual);
                 });
     }

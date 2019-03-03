@@ -7,6 +7,7 @@ import io.github.klsmith.ifpfc.cl.command.Command;
 import io.github.klsmith.ifpfc.cl.command.ConvertCommand;
 import io.github.klsmith.ifpfc.cl.command.ErrorCommand;
 import io.github.klsmith.ifpfc.cl.command.HelpCommand;
+import io.github.klsmith.ifpfc.cl.command.ResolveCommand;
 import io.github.klsmith.ifpfc.cl.command.ExitCommand;
 
 public class CommandLineApp {
@@ -51,6 +52,8 @@ public class CommandLineApp {
                     return new HelpCommand(System.out);
                 case "convert":
                     return new ConvertCommand(System.out, rest);
+                case "resolve":
+                    return new ResolveCommand(System.out, rest);
             }
         }
         return new ErrorCommand(System.out, args);

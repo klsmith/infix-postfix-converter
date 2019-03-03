@@ -70,6 +70,13 @@ public final class ConvertCommand implements Command {
         return false;
     }
 
+    @Override
+    public String toString() {
+        return String.format("Convert(%s)",
+                String.join(", ", from.toString(),
+                        to.toString(), input));
+    }
+
     public static enum Type {
 
         INFIX(new InfixArithmeticParser(),

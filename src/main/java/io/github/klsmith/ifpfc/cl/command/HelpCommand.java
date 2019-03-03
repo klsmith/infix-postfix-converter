@@ -18,6 +18,8 @@ public final class HelpCommand implements Command {
         out.println("'help' : Displays this list.");
         out.println("'convert <fromType> <toType> <input>' : ");
         out.println("\tConverts the given input from the <fromType> into the <toType>");
+        out.println("'resolve <type> <input>' : ");
+        out.println("\tResolves the given input, expected to be of the given type.");
         out.println();
     }
 
@@ -33,6 +35,11 @@ public final class HelpCommand implements Command {
             return Objects.equals(out, other.out);
         }
         return false;
+    }
+
+    @Override
+    public String toString() {
+        return "Help()";
     }
 
 }

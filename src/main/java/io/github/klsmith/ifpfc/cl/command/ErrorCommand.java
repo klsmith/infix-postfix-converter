@@ -21,4 +21,9 @@ public class ErrorCommand implements Command {
         out.printf("Command '%s' not recognized, please try again.\n\n", command);
     }
 
+    @Override
+    public String toString() {
+        return String.format("Error(%s)", command);
+    }
+
 }

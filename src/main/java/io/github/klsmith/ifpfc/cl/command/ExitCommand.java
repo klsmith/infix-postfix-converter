@@ -31,4 +31,9 @@ public final class ExitCommand implements Command {
         return false;
     }
 
+    @Override
+    public String toString() {
+        return "Exit()";
+    }
+
 }
