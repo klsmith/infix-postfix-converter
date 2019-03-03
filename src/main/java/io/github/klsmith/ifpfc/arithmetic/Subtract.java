@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 public class Subtract extends BinaryOperator {
 
     public static final String SYMBOL = "-";
-    
+
     public Subtract(int a, int b) {
         super(a, b);
     }
@@ -46,6 +46,11 @@ public class Subtract extends BinaryOperator {
     @Override
     public String getSymbol() {
         return SYMBOL;
+    }
+
+    @Override
+    public String toString() {
+        return "Subtract(" + getA() + ", " + getB() + ")";
     }
 
 }

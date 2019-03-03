@@ -50,4 +50,9 @@ public class Divide extends BinaryOperator {
         return SYMBOL;
     }
 
+    @Override
+    public String toString() {
+        return "Divide(" + getA() + ", " + getB() + ")";
+    }
+
 }

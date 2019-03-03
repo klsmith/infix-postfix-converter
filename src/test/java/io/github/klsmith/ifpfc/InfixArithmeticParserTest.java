@@ -8,6 +8,7 @@ import static org.quicktheories.generators.SourceDSL.integers;
 
 import java.util.function.BiFunction;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import io.github.klsmith.ifpfc.arithmetic.Add;
@@ -188,6 +189,28 @@ public class InfixArithmeticParserTest {
     @Test
     public void testDoubleNestedDivision() {
         testDoubleNested(Divide::new, Divide.SYMBOL);
+    }
+
+    /* Advanced Test */
+
+    @Test
+    public void testParseSimplePemdas() {
+        {
+            final int a = 1;
+            final int b = 2;
+            final int c = 3;
+            final String input = withSpaces(a, "+", b, "*", c);
+            final Arithmetic expected = new Add(a, new Multiply(b, c));
+            final Arithmetic actual = parser.parse(input);
+            assertEquals(expected, actual);
+        }
+        qt().forAll(integers().all(), integers().all(), integers().all())
+                .checkAssert((a, b, c) -> {
+                    final String input = withSpaces(a, "+", b, "*", c);
+                    final Arithmetic expected = new Add(a, new Multiply(b, c));
+                    final Arithmetic actual = parser.parse(input);
+                    assertEquals(expected, actual);
+                });
     }
 
 }

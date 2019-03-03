@@ -48,4 +48,9 @@ public class Multiply extends BinaryOperator {
         return SYMBOL;
     }
 
+    @Override
+    public String toString() {
+        return "Multiply(" + getA() + ", " + getB() + ")";
+    }
+
 }
