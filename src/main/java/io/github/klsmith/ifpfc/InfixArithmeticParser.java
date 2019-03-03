@@ -21,6 +21,8 @@ import io.github.klsmith.ifpfc.arithmetic.Value;
 
 public class InfixArithmeticParser implements ArithmeticParser {
 
+    private final String[] OPERATOR_PRIORITY_ORDER = new String[] { "*", "/", "+", "-" };
+
     @Override
     public Arithmetic parse(String input) {
         final Group group = tokenize(input);
@@ -41,10 +43,9 @@ public class InfixArithmeticParser implements ArithmeticParser {
     private Arithmetic parse(Group inputGroup) {
         Group ouputGroup = inputGroup;
         ouputGroup = groupParenthesis(ouputGroup);
-        ouputGroup = groupOperator(ouputGroup, "*");
-        ouputGroup = groupOperator(ouputGroup, "/");
-        ouputGroup = groupOperator(ouputGroup, "+");
-        ouputGroup = groupOperator(ouputGroup, "-");
+        for (String operator : OPERATOR_PRIORITY_ORDER) {
+            ouputGroup = groupOperator(ouputGroup, operator);
+        }
         return interpret(ouputGroup);
     }
 
